@@ -141,6 +141,7 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "z2wrgqrmj0");
 </script>
+  <link rel="stylesheet" href="lead-bar.css">
 </head>
 <body class="blog-post-page">
 <a class="skip" href="#main">Skip to content</a>
@@ -155,7 +156,7 @@
 <a class="yaara-nav-link" href="blog.html" style="color:var(--cobalt)"><span>Journal</span></a>
 <button class="yaara-audience-toggle" type="button" aria-expanded="false" aria-controls="yaara-audiences"><span>Made for</span><span class="yaara-plus" aria-hidden="true"></span></button>
 </div>
-<a class="yaara-download-nav yaara-apk-link" id="nav-apk-download" href="#download"><span>Download Free APK</span><span class="yaara-download-arrow" aria-hidden="true">↓</span></a>
+<a class="yaara-download-nav yaara-apk-link" id="nav-apk-download" href="yaara.apk" download="yaara.apk"><span>Download Free APK</span><span class="yaara-download-arrow" aria-hidden="true">↓</span></a>
 <a class="yaara-try" href="./#try-it"><span>Try a split</span><span class="yaara-try-arrow" aria-hidden="true">↗</span></a>
 <button class="yaara-menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="yaara-navigation"><span class="yaara-menu-label">Menu</span><span class="yaara-menu-lines" aria-hidden="true"><i></i><i></i></span></button>
 </nav>
@@ -296,7 +297,7 @@
         <h4>Skip the mental tally.</h4>
         <p>Yaara lets roommates record item-based shares, attach receipt photos, and exclude non-participants in seconds. 100% Free on Android.</p>
       </div>
-      <a href="#download" class="button cobalt-bg yaara-apk-link">Download Free APK <span>↓</span></a>
+      <a href="yaara.apk" download="yaara.apk" class="button cobalt-bg yaara-apk-link">Download Free APK <span>↓</span></a>
     </div>
 
     <h2 id="recording-repayments">How to Record Repayments Without Confusing Balances</h2>
@@ -343,7 +344,7 @@
     <div class="sidebar-promo">
       <h5>Good Company. Clear Money.</h5>
       <p>Try Yaara with your roommates. Completely free, no subscriptions.</p>
-      <a href="#download" class="button navy yaara-apk-link">Download Free APK <span>↓</span></a>
+      <a href="yaara.apk" download="yaara.apk" class="button navy yaara-apk-link">Download Free APK <span>↓</span></a>
     </div>
   </aside>
 </div>
@@ -367,7 +368,7 @@
   <span>© <span id="year">2026</span> Yaara. All rights reserved.</span>
   <p>Made for the life you share.</p>
   <span class="footer-credit">Crafted with love by <a href="https://webcraftio.com/" target="_blank" rel="noopener">webcraftio.com</a></span>
-  <div class="footer-links-clean"><a href="#download" class="yaara-apk-link">Download Free APK ↓</a><a href="mailto:contact@yaara.webcraftio.com" class="footer-contact-link">contact@yaara.webcraftio.com</a><span class="footer-tag">· 100% Free Shared Ledger</span></div>
+  <div class="footer-links-clean"><a href="yaara.apk" download="yaara.apk" class="yaara-apk-link">Download Free APK ↓</a><a href="mailto:contact@yaara.webcraftio.com" class="footer-contact-link">contact@yaara.webcraftio.com</a><span class="footer-tag">· 100% Free Shared Ledger</span></div>
 </div>
 </footer>
 
@@ -384,5 +385,6 @@ window.addEventListener('scroll', () => {
 const yEl = document.getElementById('year');
 if (yEl) yEl.textContent = new Date().getFullYear();
 </script>
+  <script src="lead-bar.js" defer></script>
 </body>
 </html>

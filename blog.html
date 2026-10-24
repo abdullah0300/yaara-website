@@ -71,6 +71,7 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "z2wrgqrmj0");
 </script>
+  <link rel="stylesheet" href="lead-bar.css">
 </head>
 <body class="blog-page">
 <a class="skip" href="#main">Skip to content</a>
@@ -85,7 +86,7 @@
 <a class="yaara-nav-link" href="blog.html" style="color:var(--cobalt)"><span>Journal</span></a>
 <button class="yaara-audience-toggle" type="button" aria-expanded="false" aria-controls="yaara-audiences"><span>Made for</span><span class="yaara-plus" aria-hidden="true"></span></button>
 </div>
-<a class="yaara-download-nav yaara-apk-link" id="nav-apk-download" href="#download"><span>Download Free APK</span><span class="yaara-download-arrow" aria-hidden="true">↓</span></a>
+<a class="yaara-download-nav yaara-apk-link" id="nav-apk-download" href="yaara.apk" download="yaara.apk"><span>Download Free APK</span><span class="yaara-download-arrow" aria-hidden="true">↓</span></a>
 <a class="yaara-try" href="./#try-it"><span>Try a split</span><span class="yaara-try-arrow" aria-hidden="true">↗</span></a>
 <button class="yaara-menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="yaara-navigation"><span class="yaara-menu-label">Menu</span><span class="yaara-menu-lines" aria-hidden="true"><i></i><i></i></span></button>
 </nav>
@@ -265,7 +266,7 @@
     <p>Everything in these guides is native to Yaara. Zero ads, zero monthly subscriptions, complete offline sync, and flexible split rules for every moment you share.</p>
   </div>
   <div class="blog-banner-actions">
-    <a href="#download" class="button navy yaara-apk-link">Download Free APK (Android) <span>↓</span></a>
+    <a href="yaara.apk" download="yaara.apk" class="button navy yaara-apk-link">Download Free APK (Android) <span>↓</span></a>
     <span class="hero-apk-free-tag">100% Free · No Subscription Required</span>
   </div>
 </section>
@@ -290,7 +291,7 @@
   <span>© <span id="year">2026</span> Yaara. All rights reserved.</span>
   <p>Made for the life you share.</p>
   <span class="footer-credit">Crafted with love by <a href="https://webcraftio.com/" target="_blank" rel="noopener">webcraftio.com</a></span>
-  <div class="footer-links-clean"><a href="#download" class="yaara-apk-link">Download Free APK ↓</a><a href="mailto:contact@yaara.webcraftio.com" class="footer-contact-link">contact@yaara.webcraftio.com</a><span class="footer-tag">· 100% Free Shared Ledger</span></div>
+  <div class="footer-links-clean"><a href="yaara.apk" download="yaara.apk" class="yaara-apk-link">Download Free APK ↓</a><a href="mailto:contact@yaara.webcraftio.com" class="footer-contact-link">contact@yaara.webcraftio.com</a><span class="footer-tag">· 100% Free Shared Ledger</span></div>
 </div>
 </footer>
 
@@ -307,5 +308,6 @@ window.addEventListener('scroll', () => {
 const yEl = document.getElementById('year');
 if (yEl) yEl.textContent = new Date().getFullYear();
 </script>
+  <script src="lead-bar.js" defer></script>
 </body>
 </html>

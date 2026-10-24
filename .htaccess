@@ -1,0 +1,7 @@
+AddType application/vnd.android.package-archive .apk
+
+<Files "yaara.apk">
+  Header set Content-Type "application/vnd.android.package-archive"
+  Header set Content-Disposition "attachment; filename=\"yaara.apk\""
+  Header set Cache-Control "public, max-age=86400"
+</Files>

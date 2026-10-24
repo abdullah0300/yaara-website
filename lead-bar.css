@@ -1,0 +1,156 @@
+/* ==========================================================================
+   YAARA FLOATING EDITORIAL LEAD PILL
+   Matches Yaara's exact design language:
+   - Floating organic pill, bottom-right anchor (like .yaara-try or .float-note)
+   - Ivory/cream card (#fffefa / var(--ivory))
+   - Charcoal ink text & cobalt interactive circle
+   - Compact width (max 380px)
+   ========================================================================== */
+
+.lead-pill {
+  position: fixed;
+  bottom: 26px;
+  right: 28px;
+  z-index: 120;
+  width: auto;
+  max-width: 360px;
+  background: #fffefa;
+  border: 1px solid #d8ddcc;
+  border-radius: 20px;
+  padding: 14px 16px 14px 18px;
+  box-shadow: 0 16px 36px -12px rgba(23, 25, 44, 0.18), 0 2px 6px rgba(0,0,0,0.04);
+  transform: translateY(120px) scale(0.96);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.lead-pill.is-visible {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lead-pill.is-dismissed {
+  transform: translateY(120px) scale(0.9) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.lead-pill-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.lead-pill-tag {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #7b8869;
+}
+
+.lead-pill-close {
+  background: transparent;
+  border: 0;
+  color: #a4ac96;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+  transition: color 0.2s;
+}
+
+.lead-pill-close:hover {
+  color: var(--ink, #17192c);
+}
+
+.lead-pill-title {
+  font: 500 14px/1.25 'Manrope', sans-serif;
+  letter-spacing: -0.03em;
+  color: var(--ink, #17192c);
+  margin: 0 0 11px;
+}
+
+.lead-pill-title em {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--cobalt, #4149e8);
+}
+
+.lead-pill-form {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f4f3ec;
+  border: 1px solid #d5dbc8;
+  border-radius: 40px;
+  padding: 4px 4px 4px 14px;
+  transition: border-color 0.25s, background 0.25s;
+}
+
+.lead-pill-form:focus-within {
+  border-color: var(--cobalt, #4149e8);
+  background: #fff;
+}
+
+.lead-pill-input {
+  border: 0;
+  background: transparent;
+  font: 12px/1.4 'DM Sans', sans-serif;
+  color: var(--ink, #17192c);
+  outline: none;
+  width: 100%;
+  min-width: 0;
+}
+
+.lead-pill-input::placeholder {
+  color: #8c977c;
+  font-size: 11px;
+}
+
+.lead-pill-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--cobalt, #4149e8);
+  border: 0;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.25s, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lead-pill-btn:hover {
+  background: var(--ink, #17192c);
+  transform: rotate(45deg);
+}
+
+.lead-pill-success {
+  display: none;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #4b6630;
+  padding: 4px 0;
+  font-weight: 500;
+}
+
+.lead-pill-success.is-shown {
+  display: block;
+}
+
+@media (max-width: 540px) {
+  .lead-pill {
+    right: 16px;
+    left: 16px;
+    max-width: none;
+    bottom: 20px;
+  }
+}
