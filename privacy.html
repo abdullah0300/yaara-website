@@ -155,7 +155,7 @@
 
   <div class="privacy-body">
     <div class="privacy-highlight">
-      <strong>In Summary:</strong> Yaara is an offline-first shared ledger app developed by <strong>Webcraftio</strong>. Your personal financial records, expense logs, and group balances are stored locally on your device in an encrypted SQLite database. We do not sell your personal data, we do not run third-party advertising networks, and we do not track your financial transactions.
+      <strong>In Summary:</strong> Yaara is a shared ledger app developed by <strong>Webcraftio</strong>. It stores records on your device and, for connected accounts, processes and synchronizes records through our backend. Local application storage is not separately encrypted by Yaara. We do not sell your personal data or run third-party advertising networks. Yaara records the expenses and repayments you enter; it does not move money or connect to bank accounts.
     </div>
 
     <h2>1. Information We Collect</h2>
@@ -166,6 +166,8 @@
       <li><strong>Account Details:</strong> When you choose to connect with friends via cloud sync, you may provide an email address or display name. Using Yaara completely offline requires no account creation whatsoever.</li>
       <li><strong>Ledger &amp; Financial Records:</strong> Expense titles (e.g., "Supermarket", "Internet Bill"), monetary amounts, dates, split proportions, and notes entered into your groups.</li>
       <li><strong>Receipt Photos:</strong> Photos or camera captures of paper receipts that you voluntarily attach to an expense for bookkeeping proof.</li>
+      <li><strong>Assisted Entries:</strong> If you choose receipt, voice, or text interpretation, we send your selected image, recording, or text, along with the selected currency and participant names, to our backend and the configured AI service to prepare a draft for your review.</li>
+      <li><strong>Support and Notifications:</strong> Support messages you submit and device push tokens and notification preferences needed to provide requested updates.</li>
     </ul>
 
     <h3>B. Device Permissions &amp; Hardware Access</h3>
@@ -184,7 +186,7 @@
           <tr>
             <td><strong>Camera</strong></td>
             <td><code>android.permission.CAMERA</code></td>
-            <td>Allows you to capture physical paper receipts to attach proof directly to an expense.</td>
+            <td>Allows you to capture paper receipts and scan invitation QR codes when you choose those features.</td>
           </tr>
           <tr>
             <td><strong>Photo Library</strong></td>
@@ -208,8 +210,8 @@
     <h2>2. Offline-First Architecture &amp; Data Storage</h2>
     <p>Unlike traditional cloud-only banking applications, Yaara is built with an <strong>offline-first local repository</strong>:</p>
     <ul>
-      <li><strong>Local SQLite Storage:</strong> All expenses, repayments, and groups are written instantly to your device's private storage. If you lose internet access, your ledger functions at 100% capacity.</li>
-      <li><strong>End-to-End Cloud Sync (Supabase):</strong> When connected, groups that have cloud sync enabled synchronize via encrypted HTTPS/TLS connections to our secure backend database powered by Supabase.</li>
+      <li><strong>Local Storage:</strong> Yaara uses SQLite and application storage for cached records, drafts, and queued changes. Authentication credentials use platform-backed secure storage. Yaara does not apply separate database encryption. Offline recording is supported; sign-in, invitations, synchronization, assisted interpretation, and other server actions require a connection.</li>
+      <li><strong>Cloud Sync (Supabase):</strong> Connected accounts synchronize records through HTTPS/TLS to our Supabase backend. This is encryption in transit, not end-to-end encryption: our backend must process records to validate and synchronize them. Relevant records are shared with authorized participants in the corresponding ledger or group.</li>
       <li><strong>Zero Bank Integration:</strong> Yaara does not connect to your bank accounts, credit cards, or digital wallets. Yaara is a social bookkeeping ledger, not a payment gateway. No monetary funds pass through Yaara.</li>
     </ul>
 
@@ -218,7 +220,7 @@
     <ul>
       <li>Calculate mathematically accurate group balances, proportional shares, and debt reconciliations.</li>
       <li>Synchronize shared balances between verified group members who enter your invite link or code.</li>
-      <li>Process receipt images locally or through secure vision models strictly to extract item subtotals, taxes, and service fees into your expense draft.</li>
+      <li>Process the receipt images, voice recordings, or text you submit for assisted entry through our backend and configured AI provider to create a draft for your review.</li>
     </ul>
 
     <h2>4. Third-Party Sharing &amp; Advertising</h2>
@@ -226,15 +228,21 @@
     <p>We do not use Google AdMob, Meta Audience Network, or any behavioral ad trackers. The infrastructure providers we rely on strictly process operational data under strict confidentiality:</p>
     <ul>
       <li><strong>Supabase:</strong> Encrypted cloud database and authentication infrastructure.</li>
-      <li><strong>Expo / EAS:</strong> Mobile application updates and crash telemetry for stability.</li>
+      <li><strong>Expo / EAS and platform notification services:</strong> Application distribution, updates, and delivery of push notifications using device tokens and notification payloads.</li>
+      <li><strong>Google Gemini:</strong> The configured assisted-entry integration uses Google's Gemini service to interpret entries you choose to submit. Availability depends on server configuration. Avoid including information that is unnecessary for the entry.</li>
     </ul>
 
     <h2>5. Data Retention &amp; Account Deletion</h2>
     <p>You have full sovereignty over your information:</p>
     <ul>
-      <li><strong>Local Data:</strong> Uninstalling the Yaara app or clearing app storage immediately deletes all local SQLite databases and saved receipt images from your phone.</li>
-      <li><strong>Cloud Account &amp; Group Deletion:</strong> You can delete any group, archive past records, or request complete account deletion directly from the <em>Settings &gt; Account</em> screen in the app. Upon deletion, all associated ledgers, history, and uploaded receipts are permanently purged from our servers within 30 days.</li>
+      <li><strong>Local Data:</strong> Clearing application storage or uninstalling normally removes the app's local data. Files you export, images you save elsewhere, and operating-system backups may remain outside the app.</li>
+      <li><strong>Cloud Account Deletion:</strong> Open <em>Settings &gt; Account &amp; security &gt; Delete my account</em>, review the retention notice, type DELETE, and confirm. You may need to transfer ownership of groups with other signed-in members first. Account deletion removes your sign-in identity and access. It does not erase every shared ledger entry.</li>
+      <li><strong>Shared Record Retention:</strong> Shared financial history is retained with anonymized participant labels so other participants can keep their records. Original notes, saved messages, and shared receipts may still contain names or other information. These shared records are not covered by a promise of complete deletion within 30 days. Contact us with a specific data-removal request so we can assess it.</li>
     </ul>
+
+    <h3 id="account-deletion">Request Yaara account or data deletion on the web</h3>
+    <p>You can request deletion without using the app. Email <a href="mailto:contact@yaara.webcraftio.com?subject=Yaara%20account%20deletion%20request">contact@yaara.webcraftio.com</a> with the subject <strong>Yaara account deletion request</strong>, preferably from the email address registered to your Yaara account. State whether you want your account deleted or want specific data removed. Never send your password, authentication codes, or full financial history. Webcraftio may ask you to verify ownership before acting.</p>
+    <p>Account deletion removes your sign-in identity and access. The shared-history retention described above also applies to web requests. Records downloaded or retained by other participants and files exported outside Yaara cannot be removed from their devices by deleting your account.</p>
 
     <h2>6. Children's Privacy</h2>
     <p>Yaara is not directed at children under the age of 13. We do not knowingly collect personal identifiable information from children. If you believe a child has provided us with personal information, please contact us and we will promptly remove it.</p>
