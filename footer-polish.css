@@ -7,3 +7,41 @@
 @media(max-width:900px){.footer .footer-word{font-size:32.6vw;padding-bottom:35px}}
 @media(max-width:600px){.footer .footer-word{font-size:32.7vw;line-height:1.25;padding-bottom:20px}}
 .footer-links-clean{display:flex;align-items:center;gap:14px;font-size:11px}.footer-links-clean a{color:var(--cobalt);text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:6px;transition:color .3s}.footer-links-clean a:hover{color:var(--ink)}.footer-tag{color:#828c74;font-size:10px;font-weight:500}.footer-directory,.footer .footer-bottom{position:relative;z-index:2}.footer .footer-word{z-index:0}
+/* Webcraftio Creator Attribution in Footer */
+.footer-credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: #78816c;
+}
+
+.footer-credit a {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color .2s var(--ease);
+}
+
+.footer-credit a:hover {
+  color: var(--cobalt);
+}
+
+.footer-credit .heart {
+  color: #e54b4b;
+  display: inline-block;
+  font-style: normal;
+  font-size: 11px;
+}
+.footer-contact-link {
+  color: #78816c;
+  text-decoration: none;
+  font-size: 10px;
+  transition: color .2s var(--ease);
+}
+
+.footer-contact-link:hover {
+  color: var(--cobalt);
+  text-decoration: underline;
+}
