@@ -1,0 +1,1 @@
+(()=>{'use strict';const panels=document.querySelectorAll('.feature-panel');const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('feature-visible');observer.unobserve(e.target);}}),{threshold:.12});panels.forEach(p=>observer.observe(p));})();
