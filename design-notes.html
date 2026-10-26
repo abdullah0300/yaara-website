@@ -41,55 +41,39 @@
 <h2>Student page</h2><p>The dedicated student page follows a university week through lunch, a group project, a shared flat, a personal loan and a weekend trip. Original campus and project photographs anchor the story. A participant-selectable project-budget demo and a partial-repayment example make the benefits concrete. The page preserves the current pilot and product boundaries.</p><h2>Content and release boundaries</h2><ul><li>Public download URLs, pricing and release dates are not invented. The primary action lets visitors explore a working split example while availability remains a pilot.</li><li>There are no fabricated testimonials, user totals, awards for Yaara or guarantees of repayment.</li><li>Repayments happen outside Yaara. The UI records them.</li><li>Separate currency records do not imply exchange-rate conversion.</li><li>Recurring drafts require review before posting. They are not automatic deductions.</li><li>Motion respects the system preference, with a visible off switch. Native scrolling, semantic anchors and keyboard-accessible tabs remain usable.</li></ul>
 <h2>Assets</h2><p>Logo, app mark and colour tokens: supplied Yaara brand pack. Lifestyle photography: original image generated for this concept, not a real customer photograph or endorsement. Fonts: locally bundled Manrope and DM Sans, distributed under the SIL Open Font License.</p><p>Image prompt, built-in image-generation tool: “Four Pakistani friends in their mid twenties casually enjoying a relaxed home dinner together in a contemporary shared apartment in Lahore; editorial lifestyle photography, 35mm film texture, warm afternoon sunlight, ivory interiors, cobalt shirt and pale lime detail; candid, unposed, no text or logos.” Final website asset: <code>dist/assets/friends.webp</code>.</p><p>Hero revision: original rooftop photograph generated with the built-in image tool. Prompt: “Three Pakistani friends laughing over chai on a Lahore apartment rooftop; candid medium-format editorial photography, afternoon sun, cobalt, cream and olive clothing, portrait composition, no text or interface.” Website asset: <code>dist/assets/hero-rooftop.webp</code>. This is illustrative brand imagery, not a customer endorsement.</p><p><a href="./">Explore the landing page →</a></p></main><section style="padding:40px"><h2>Partners: a shared beginning</h2><p>An editorial studio story using original photography, wide typographic compositions, an automatically traced shared-expense diagram and a useful live split. Each section follows a concrete step: buy, understand, agree, repay. Financial examples are illustrative. Motion respects system and saved preferences.</p></section><section style="padding:40px"><h2>Shared navigation research</h2><p>A compact ivory navigation with cobalt circular action, a photographic audience panel and expressive typography. Same structure on home, students and partners. Desktop panel reveals and image hovers; mobile large-link menu with expandable audience rows. Original Yaara imagery is reused; no third-party imagery or component code copied.</p><ul><li><a href="https://www.awwwards.com/inspiration/interactive-site-navigation-fourmeta-agency">Awwwards — Fourmeta interactive navigation</a>: contextual visual navigation reference.</li><li><a href="https://www.awwwards.com/inspiration/modular-homepage-overview-animated-dropdown-navigation-footer-with-subscribe-form-so-what-fashion-brand">Awwwards — SO.WHAT animated dropdown</a>: photographic grouping and restrained container reference.</li><li><a href="https://lusion.co/">Lusion</a> / <a href="https://www.awwwards.com/sites/lusion-v3">Awwwards SOTD</a>: compact menu control and expressive transitions reference.</li><li><a href="https://www.superlist.com/">Superlist</a> / <a href="https://www.awwwards.com/sites/superlist">Awwwards SOTD</a>: clear use-case grouping and product navigation reference.</li><li><a href="https://www.awwwards.com/inspiration/menu-analogue-foundation">Awwwards — Analogue Foundation menu</a>: editorial navigation reference.</li><li><a href="https://www.awwwards.com/inspiration/menu-navigation-disrupt">Awwwards — Disrupt menu navigation</a>: typography and menu animation reference.</li></ul></section><section style="padding:40px"><h2>Travel: the scenic route</h2><p>A cinematic photograph carries the first line of the hero into a cobalt editorial second line. A guesthouse spread introduces the first booking; a timed photo story connects the ride, chai and stay. A clearly editable activity split demonstrates participant selection. The trip record and partial repayment finish the same story. Ivory, pale sage and soft lavender backgrounds retain Yaara’s existing style. Photography generated specifically for the page; see the source asset prompt document. Navigation now contains three real audience destinations.</p></section><section style="padding:40px"><h2>Housemates: room for the everyday</h2><p>A warm kitchen portrait faces large editorial type. A month unfolds through three purchases beside an original domestic still life. A light peach expense workspace makes participation and agreed amounts editable; a pale sage paper draft demonstrates review before recording. The month-end record and partial repayment carry the story through. Motion reveals the timeline in sequence and respects reduced-motion preferences. The shared Made for menu now includes housemates on all five pages.</p></section><section style="padding:40px"><h2>Housemates: an information-first story</h2><p>The page keeps its visual language while replacing app demonstrations with recognisable household problems, expense-specific solutions, practical agreements and clear answers. All examples are readable in HTML. Search preparation follows Google Search Central guidance on helpful content, textual information, internal links and metadata, without fabricated statistics or claims of guaranteed visibility. Owner-private access is preserved.</p><a href="https://developers.google.com/search/docs/appearance/ai-features">Google Search Central — AI features and your website</a></section>
 <!-- Modern Bottom-Left QR Code Floating Trigger -->
-<button class="yaara-qr-fab" id="yaara-qr-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="yaara-qr-modal" aria-label="Scan QR code to install Yaara on Google Play" title="Scan QR to install on Android">
-  <span class="qr-fab-live" aria-hidden="true"></span>
-  <span class="qr-fab-icon" aria-hidden="true">
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-      <path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v3h-3v-3zm-5 0h3v3h-3v-3zm2 2h3v3h-3v-3zm-2 2h3v3h-3v-3zm4 0h3v4h-3v-4zm-4 4h3v2h-3v-2zm-6-8h2v2H7v-2zm0 4h2v2H7v-2zm12-4h2v2h-2v-2z"/>
-    </svg>
-  </span>
-  <span class="qr-fab-label">
-    <span>Scan QR</span>
-    <span class="qr-fab-pill">Get App</span>
-  </span>
+<button class="yaara-qr-fab" id="yaara-qr-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="yaara-qr-modal" aria-label="Scan QR code to install Yaara on Google Play" title="Scan QR code">
+  <svg class="qr-fab-svg" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+    <path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v3h-3v-3zm-5 0h3v3h-3v-3zm2 2h3v3h-3v-3zm-2 2h3v3h-3v-3zm4 0h3v4h-3v-4zm-4 4h3v2h-3v-2zm-6-8h2v2H7v-2zm0 4h2v2H7v-2zm12-4h2v2h-2v-2z"/>
+  </svg>
 </button>
 
 <!-- Responsive Modern QR Code Modal -->
 <div class="yaara-qr-modal" id="yaara-qr-modal" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title" hidden>
   <div class="yaara-qr-card">
-    <button class="yaara-qr-close" type="button" aria-label="Close QR code modal">×</button>
+    <button class="yaara-qr-close" type="button" aria-label="Close QR code modal">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
     <div class="qr-modal-header">
-      <div class="qr-platform-badge">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-1.0001s.4482-.9997.9993-.9997c.5516 0 .9997.4482.9997.9997 0 .5515-.4481 1.0001-.9997 1.0001m-11.046 0c-.5511 0-.9993-.4486-.9993-1.0001s.4482-.9997.9993-.9997c.5516 0 .9997.4482.9997.9997 0 .5515-.4481 1.0001-.9997 1.0001m11.4045-6.02l1.997-3.459a.416.416 0 00-.152-.5674.416.416 0 00-.5674.152l-2.0223 3.503C15.5902 8.4116 13.8533 8 12 8s-3.5902.4116-5.1368 1.4499L4.841 5.9469a.416.416 0 00-.5674-.152.416.416 0 00-.152.5674l1.997 3.459C2.6877 11.5369 0 15.6888 0 20.4853h24c0-4.7965-2.6877-8.9484-6.1185-11.1639"/></svg>
-        <span>Google Play</span>
-        <b>100% Free</b>
-      </div>
-      <h3 id="qr-modal-title">Scan to install Yaara</h3>
-      <p>Point your phone camera at the code to install directly from the Play Store.</p>
+      <h3 id="qr-modal-title">Get Yaara on your phone</h3>
+      <p>Scan with your phone camera to download directly from Google Play.</p>
     </div>
-    <div class="qr-viewfinder">
-      <span class="qr-corner corner-tl" aria-hidden="true"></span>
-      <span class="qr-corner corner-tr" aria-hidden="true"></span>
-      <span class="qr-corner corner-bl" aria-hidden="true"></span>
-      <span class="qr-corner corner-br" aria-hidden="true"></span>
+    <div class="qr-code-box">
       <div class="qr-code-wrapper">
-        <img class="qr-code-img" src="assets/playstore-qr.svg" alt="Google Play Store QR Code for Yaara" width="190" height="190" loading="lazy">
+        <img class="qr-code-img" src="assets/playstore-qr.svg" alt="Google Play Store QR Code for Yaara" width="188" height="188" loading="lazy">
         <div class="qr-center-chip" aria-hidden="true">
           <img src="assets/icon.png" alt="" width="34" height="34">
         </div>
       </div>
-      <div class="qr-scan-beam" aria-hidden="true"></div>
     </div>
     <a class="qr-direct-btn" href="https://play.google.com/store/apps/details?id=com.webcraftio.saath&pcampaignid=web_share" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-1.0001s.4482-.9997.9993-.9997c.5516 0 .9997.4482.9997.9997 0 .5515-.4481 1.0001-.9997 1.0001m-11.046 0c-.5511 0-.9993-.4486-.9993-1.0001s.4482-.9997.9993-.9997c.5516 0 .9997.4482.9997.9997 0 .5515-.4481 1.0001-.9997 1.0001m11.4045-6.02l1.997-3.459a.416.416 0 00-.152-.5674.416.416 0 00-.5674.152l-2.0223 3.503C15.5902 8.4116 13.8533 8 12 8s-3.5902.4116-5.1368 1.4499L4.841 5.9469a.416.416 0 00-.5674-.152.416.416 0 00-.152.5674l1.997 3.459C2.6877 11.5369 0 15.6888 0 20.4853h24c0-4.7965-2.6877-8.9484-6.1185-11.1639"/></svg>
-      <span>Open in Google Play Store</span>
-      <span aria-hidden="true">↗</span>
+      <span>Open on Google Play</span>
+      <span class="qr-arrow" aria-hidden="true">↗</span>
     </a>
-    <div class="qr-modal-footer">
-      <p>Instant installation · No card required</p>
-    </div>
   </div>
 </div>
+
+
 
   <script src="qr-modal.js" defer></script>
 </body></html>
