@@ -19,7 +19,7 @@
       <span class="lead-pill-tag">Stay in touch</span>
       <button type="button" class="lead-pill-close" id="yaara-lead-close" aria-label="Close">×</button>
     </div>
-    <div class="lead-pill-title">New guides &amp; early APK updates. <em>Zero noise.</em></div>
+    <div class="lead-pill-title">New guides &amp; early app updates. <em>Zero noise.</em></div>
     <form class="lead-pill-form" id="yaara-lead-form">
       <input type="email" class="lead-pill-input" id="yaara-lead-email" placeholder="Your email address" required autocomplete="email" aria-label="Email address">
       <button type="submit" class="lead-pill-btn" aria-label="Subscribe">
