@@ -72,6 +72,7 @@
     })(window, document, "clarity", "script", "z2wrgqrmj0");
 </script>
   <link rel="stylesheet" href="lead-bar.css">
+  <link rel="stylesheet" href="qr-modal.css">
 </head>
 <body class="blog-page">
 <a class="skip" href="#main">Skip to content</a>
@@ -309,5 +310,58 @@ const yEl = document.getElementById('year');
 if (yEl) yEl.textContent = new Date().getFullYear();
 </script>
   <script src="lead-bar.js" defer></script>
+
+<!-- Modern Bottom-Left QR Code Floating Trigger -->
+<button class="yaara-qr-fab" id="yaara-qr-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="yaara-qr-modal" aria-label="Scan QR code to install Yaara on Google Play" title="Scan QR to install on Android">
+  <span class="qr-fab-live" aria-hidden="true"></span>
+  <span class="qr-fab-icon" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+      <path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v3h-3v-3zm-5 0h3v3h-3v-3zm2 2h3v3h-3v-3zm-2 2h3v3h-3v-3zm4 0h3v4h-3v-4zm-4 4h3v2h-3v-2zm-6-8h2v2H7v-2zm0 4h2v2H7v-2zm12-4h2v2h-2v-2z"/>
+    </svg>
+  </span>
+  <span class="qr-fab-label">
+    <span>Scan QR</span>
+    <span class="qr-fab-pill">Get App</span>
+  </span>
+</button>
+
+<!-- Responsive Modern QR Code Modal -->
+<div class="yaara-qr-modal" id="yaara-qr-modal" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title" hidden>
+  <div class="yaara-qr-card">
+    <button class="yaara-qr-close" type="button" aria-label="Close QR code modal">×</button>
+    <div class="qr-modal-header">
+      <div class="qr-platform-badge">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-1.0001s.4482-.9997.9993-.9997c.5516 0 .9997.4482.9997.9997 0 .5515-.4481 1.0001-.9997 1.0001m-11.046 0c-.5511 0-.9993-.4486-.9993-1.0001s.4482-.9997.9993-.9997c.5516 0 .9997.4482.9997.9997 0 .5515-.4481 1.0001-.9997 1.0001m11.4045-6.02l1.997-3.459a.416.416 0 00-.152-.5674.416.416 0 00-.5674.152l-2.0223 3.503C15.5902 8.4116 13.8533 8 12 8s-3.5902.4116-5.1368 1.4499L4.841 5.9469a.416.416 0 00-.5674-.152.416.416 0 00-.152.5674l1.997 3.459C2.6877 11.5369 0 15.6888 0 20.4853h24c0-4.7965-2.6877-8.9484-6.1185-11.1639"/></svg>
+        <span>Google Play</span>
+        <b>100% Free</b>
+      </div>
+      <h3 id="qr-modal-title">Scan to install Yaara</h3>
+      <p>Point your phone camera at the code to install directly from the Play Store.</p>
+    </div>
+    <div class="qr-viewfinder">
+      <span class="qr-corner corner-tl" aria-hidden="true"></span>
+      <span class="qr-corner corner-tr" aria-hidden="true"></span>
+      <span class="qr-corner corner-bl" aria-hidden="true"></span>
+      <span class="qr-corner corner-br" aria-hidden="true"></span>
+      <div class="qr-code-wrapper">
+        <img class="qr-code-img" src="assets/playstore-qr.svg" alt="Google Play Store QR Code for Yaara" width="190" height="190" loading="lazy">
+        <div class="qr-center-chip" aria-hidden="true">
+          <img src="assets/icon.png" alt="" width="34" height="34">
+        </div>
+      </div>
+      <div class="qr-scan-beam" aria-hidden="true"></div>
+    </div>
+    <a class="qr-direct-btn" href="https://play.google.com/store/apps/details?id=com.webcraftio.saath&pcampaignid=web_share" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-1.0001s.4482-.9997.9993-.9997c.5516 0 .9997.4482.9997.9997 0 .5515-.4481 1.0001-.9997 1.0001m-11.046 0c-.5511 0-.9993-.4486-.9993-1.0001s.4482-.9997.9993-.9997c.5516 0 .9997.4482.9997.9997 0 .5515-.4481 1.0001-.9997 1.0001m11.4045-6.02l1.997-3.459a.416.416 0 00-.152-.5674.416.416 0 00-.5674.152l-2.0223 3.503C15.5902 8.4116 13.8533 8 12 8s-3.5902.4116-5.1368 1.4499L4.841 5.9469a.416.416 0 00-.5674-.152.416.416 0 00-.152.5674l1.997 3.459C2.6877 11.5369 0 15.6888 0 20.4853h24c0-4.7965-2.6877-8.9484-6.1185-11.1639"/></svg>
+      <span>Open in Google Play Store</span>
+      <span aria-hidden="true">↗</span>
+    </a>
+    <div class="qr-modal-footer">
+      <p>Instant installation · No card required</p>
+    </div>
+  </div>
+</div>
+
+  <script src="qr-modal.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,398 @@
+/* Modern QR Code Floating Trigger & Responsive Modal */
+
+/* Floating Trigger Button on Bottom-Left */
+.yaara-qr-fab {
+  position: fixed;
+  bottom: 26px;
+  left: 26px;
+  z-index: 950;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px 10px 14px;
+  background: #1b1e24;
+  color: #f5f3ed;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 100px;
+  box-shadow: 0 12px 32px -6px rgba(0, 0, 0, 0.38), 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+              background 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.35s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.yaara-qr-fab:hover {
+  background: var(--cobalt, #4149e8);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 16px 36px -6px rgba(65, 73, 232, 0.45), 0 6px 16px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+}
+
+.yaara-qr-fab:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.qr-fab-live {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #e8f4a4;
+  box-shadow: 0 0 0 0 rgba(232, 244, 164, 0.7);
+  animation: qr-pulse 2.2s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes qr-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(232, 244, 164, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(232, 244, 164, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(232, 244, 164, 0);
+  }
+}
+
+.qr-fab-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.qr-fab-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qr-fab-pill {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(255, 255, 255, 0.12);
+  color: #e8f4a4;
+  padding: 2px 7px;
+  border-radius: 20px;
+}
+
+.yaara-qr-fab:hover .qr-fab-pill {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+
+/* Modal Backdrop */
+.yaara-qr-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(18, 22, 20, 0.68);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.yaara-qr-modal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Modal Card */
+.yaara-qr-card {
+  position: relative;
+  width: 100%;
+  max-width: 390px;
+  background: #ffffff;
+  border-radius: 30px;
+  padding: 34px 28px 28px;
+  box-shadow: 0 30px 80px -15px rgba(10, 15, 25, 0.4), 0 0 0 1px rgba(0, 0, 0, 0.06);
+  text-align: center;
+  transform: scale(0.92) translateY(14px);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.yaara-qr-modal.is-open .yaara-qr-card {
+  transform: scale(1) translateY(0);
+}
+
+/* Close Button */
+.yaara-qr-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #f3f3ee;
+  border: 0;
+  color: #4a5047;
+  font-size: 19px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s, transform 0.25s;
+}
+
+.yaara-qr-close:hover {
+  background: #202421;
+  color: #ffffff;
+  transform: rotate(90deg);
+}
+
+/* Header */
+.qr-modal-header {
+  margin-bottom: 22px;
+}
+
+.qr-platform-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px 4px 10px;
+  background: #f2f5ea;
+  color: #384230;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.qr-platform-badge svg {
+  color: #278d38;
+}
+
+.qr-platform-badge b {
+  font-weight: 700;
+  color: var(--cobalt, #4149e8);
+  margin-left: 2px;
+}
+
+.qr-modal-header h3 {
+  font-family: 'Manrope', -apple-system, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: #1a1d20;
+  margin: 0 0 8px;
+}
+
+.qr-modal-header p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #727a6c;
+  margin: 0 auto;
+  max-width: 280px;
+}
+
+/* Modern Viewfinder Frame */
+.qr-viewfinder {
+  position: relative;
+  width: 230px;
+  height: 230px;
+  margin: 0 auto 22px;
+  padding: 16px;
+  background: #fafaf8;
+  border-radius: 24px;
+  border: 1px solid #e9e9e2;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.03);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+/* Viewfinder Reticle Corners */
+.qr-corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: var(--cobalt, #4149e8);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.corner-tl {
+  top: 10px;
+  left: 10px;
+  border-width: 3px 0 0 3px;
+  border-top-left-radius: 8px;
+}
+
+.corner-tr {
+  top: 10px;
+  right: 10px;
+  border-width: 3px 3px 0 0;
+  border-top-right-radius: 8px;
+}
+
+.corner-bl {
+  bottom: 10px;
+  left: 10px;
+  border-width: 0 0 3px 3px;
+  border-bottom-left-radius: 8px;
+}
+
+.corner-br {
+  bottom: 10px;
+  right: 10px;
+  border-width: 0 3px 3px 0;
+  border-bottom-right-radius: 8px;
+}
+
+/* QR Image & Center Logo */
+.qr-code-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.qr-code-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  object-fit: contain;
+}
+
+.qr-center-chip {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 4px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+  display: grid;
+  place-items: center;
+}
+
+.qr-center-chip img {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+/* Sweep Scanning Beam Effect */
+.qr-scan-beam {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #4149e8, #e8f4a4, #4149e8, transparent);
+  box-shadow: 0 0 12px #4149e8;
+  pointer-events: none;
+  animation: qr-beam-scan 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes qr-beam-scan {
+  0% {
+    top: 16px;
+    opacity: 0.1;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    top: calc(100% - 16px);
+    opacity: 0.1;
+  }
+}
+
+/* Actions */
+.qr-direct-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 20px;
+  background: var(--cobalt, #4149e8);
+  color: #ffffff;
+  border-radius: 100px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 10px 24px -6px rgba(65, 73, 232, 0.4);
+  box-sizing: border-box;
+}
+
+.qr-direct-btn:hover {
+  background: #1b1e24;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -6px rgba(27, 30, 36, 0.35);
+  color: #ffffff;
+}
+
+.qr-direct-btn svg {
+  flex-shrink: 0;
+}
+
+.qr-direct-btn span:last-child {
+  font-size: 15px;
+  transition: transform 0.3s ease;
+}
+
+.qr-direct-btn:hover span:last-child {
+  transform: translate(2px, -2px);
+}
+
+.qr-modal-footer {
+  margin-top: 14px;
+}
+
+.qr-modal-footer p {
+  font-size: 11px;
+  color: #8b9285;
+  margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 540px) {
+  .yaara-qr-fab {
+    bottom: 20px;
+    left: 16px;
+    padding: 10px 14px;
+    font-size: 11px;
+  }
+  .yaara-qr-card {
+    padding: 30px 20px 22px;
+    border-radius: 26px;
+  }
+  .qr-viewfinder {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qr-fab-live,
+  .qr-scan-beam {
+    animation: none !important;
+  }
+}
