@@ -1,6 +1,7 @@
 'use strict';
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 
+
 const money=n=>new Intl.NumberFormat('en-PK',{maximumFractionDigits:2}).format(n);
 const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
 let manualReduce=false;
