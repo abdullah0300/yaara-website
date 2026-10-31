@@ -603,7 +603,56 @@
   <script>
     const SUPABASE_URL = "https://omtdlmaxoybkrjhoetkr.supabase.co";
     const SUPABASE_KEY = "sb_publishable_YqnffITilWuo6CgbR5RmKA_nIKR1U2D";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    let dbClient = null;
+
+    function getDbClient() {
+      if (!dbClient && window.supabase && typeof window.supabase.createClient === 'function') {
+        try {
+          dbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        } catch (e) {
+          console.warn('Supabase client notice:', e);
+        }
+      }
+      return dbClient;
+    }
+
+    // Direct RPC with automatic fetch fallback (zero CDN dependency)
+    async function rpcCall(functionName, payload) {
+      const client = getDbClient();
+      if (client) {
+        try {
+          const res = await client.rpc(functionName, payload);
+          if (!res.error && res.data !== undefined && res.data !== null) {
+            return { data: res.data, error: null };
+          }
+          if (res.error) console.warn('SDK RPC error:', res.error);
+        } catch (sdkErr) {
+          console.warn('SDK RPC threw:', sdkErr);
+        }
+      }
+
+      try {
+        const resp = await fetch(SUPABASE_URL + '/rest/v1/rpc/' + functionName, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload || {})
+        });
+
+        if (!resp.ok) {
+          const errData = await resp.json().catch(() => ({ message: resp.statusText }));
+          return { data: null, error: errData };
+        }
+
+        const data = await resp.json();
+        return { data, error: null };
+      } catch (netErr) {
+        return { data: null, error: netErr };
+      }
+    }
 
     const SESSION_KEY = "yaara_ops_admin_token";
     let allPioneers = [];
@@ -629,7 +678,7 @@
       unlockText.innerText = 'Verifying Passkey...';
 
       try {
-        const { data, error } = await supabase.rpc('get_admin_pioneers', { admin_secret: passkey });
+        const { data, error } = await rpcCall('get_admin_pioneers', { admin_secret: passkey });
 
         if (error || !data) {
           errBox.classList.add('visible');
@@ -668,7 +717,7 @@
       if (savedPass) {
         currentPasskey = savedPass;
         try {
-          const { data, error } = await supabase.rpc('get_admin_pioneers', { admin_secret: savedPass });
+          const { data, error } = await rpcCall('get_admin_pioneers', { admin_secret: savedPass });
           if (!error && data) {
             document.getElementById('security-gate').style.display = 'none';
             document.getElementById('dashboard-view').style.display = 'block';
@@ -698,7 +747,7 @@
     async function refreshDashboard() {
       if (!currentPasskey) return;
       try {
-        const { data, error } = await supabase.rpc('get_admin_pioneers', { admin_secret: currentPasskey });
+        const { data, error } = await rpcCall('get_admin_pioneers', { admin_secret: currentPasskey });
         if (!error && data) {
           allPioneers = data;
           applyFilters();
