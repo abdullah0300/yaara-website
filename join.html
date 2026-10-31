@@ -235,16 +235,17 @@
       gap: 38px;
       align-items: start;
     }
-    @media (max-width: 950px) {
-      .battle-grid {
-        grid-template-columns: 1fr;
-      }
-    }
+    
 
     /* LEFT: Real-Time 3D Card Preview */
     .card-anchor-sticky {
-      position: sticky;
-      top: 110px;
+      position: relative;
+    }
+    @media (min-width: 1025px) {
+      .card-anchor-sticky {
+        position: sticky;
+        top: 110px;
+      }
     }
     .preview-card-wrap {
       perspective: 1000px;
@@ -977,55 +978,117 @@
     }
   
     /* =========================================================================
-       RESPONSIVE ENHANCEMENTS FOR MOBILE & TABLETS
+       RESPONSIVE ENHANCEMENTS FOR MOBILE & TABLETS (ZERO OVERLAP GUARANTEE)
        ========================================================================= */
-    @media (max-width: 950px) {
+    .clash-stage {
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer {
+      position: relative !important;
+      z-index: 5 !important;
+      clear: both !important;
+      overflow: hidden !important;
+    }
+
+    @media (max-width: 1024px) {
+      .battle-grid {
+        display: block !important;
+        width: 100% !important;
+      }
       .card-anchor-sticky {
         position: static !important;
         top: auto !important;
+        width: 100% !important;
+        margin-bottom: 34px !important;
+        transform: none !important;
       }
-      .battle-grid {
-        grid-template-columns: 1fr !important;
-        gap: 28px !important;
+      .preview-card-wrap {
+        perspective: none !important;
+        margin-bottom: 18px !important;
+      }
+      .pioneer-pass-card {
+        transform: none !important;
+        transform-style: flat !important;
+      }
+      .action-battle-column {
+        display: block !important;
+        width: 100% !important;
+        position: relative !important;
+        z-index: 2 !important;
+      }
+      .form-card-box {
+        margin-bottom: 28px !important;
+        width: 100% !important;
+      }
+      .perks-visual-stage {
+        width: 100% !important;
+        clear: both !important;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .yaara-header {
+        background: #F5F3ED !important; /* Solid background so scrolling content cannot bleed underneath */
+      }
+      .yaara-download-nav {
+        margin-left: auto !important;
+        font-size: 10.5px !important;
+        padding: 4px 6px 4px 12px !important;
+      }
+      .yaara-download-nav svg {
+        display: none !important;
       }
     }
 
     @media (max-width: 768px) {
       .clash-stage {
-        padding-top: 100px !important;
+        padding-top: 104px !important;
         padding-bottom: 60px !important;
       }
       .clash-hero-title {
-        font-size: clamp(34px, 8.5vw, 54px) !important;
-        line-height: 1.04 !important;
+        font-size: clamp(32px, 8vw, 50px) !important;
+        line-height: 1.05 !important;
+        margin-bottom: 14px !important;
       }
       .clash-hero-sub {
-        font-size: 15px !important;
+        font-size: 14.5px !important;
+        line-height: 1.55 !important;
+        margin-bottom: 28px !important;
       }
       .arena-scoreboard {
         padding: 20px 16px !important;
         border-radius: 20px !important;
         box-shadow: 5px 6px 0px var(--ink) !important;
+        margin-bottom: 32px !important;
       }
       .form-card-box {
-        padding: 26px 20px !important;
-        border-radius: 22px !important;
-        box-shadow: 6px 7px 0px var(--ink) !important;
+        padding: 24px 18px !important;
+        border-radius: 20px !important;
+        box-shadow: 5px 6px 0px var(--ink) !important;
       }
       .perks-visual-stage {
         padding: 24px 18px !important;
-        border-radius: 22px !important;
-        box-shadow: 6px 7px 0px var(--ink) !important;
+        border-radius: 20px !important;
+        box-shadow: 5px 6px 0px var(--ink) !important;
       }
       .visual-cards-grid {
         grid-template-columns: 1fr !important;
+        gap: 14px !important;
       }
     }
 
     @media (max-width: 480px) {
       .clash-stage {
-        padding-top: 88px !important;
+        padding-top: 92px !important;
         padding-bottom: 45px !important;
+      }
+      .yaara-download-nav {
+        display: none !important; /* Hide Google play pill from navbar on small phones so header never wraps */
+      }
+      .yaara-menu-toggle {
+        margin-left: auto !important;
       }
       .clash-badge-pill {
         font-size: 9.5px !important;
@@ -1041,38 +1104,39 @@
         gap: 10px !important;
       }
       .pioneer-pass-card {
-        padding: 20px 18px !important;
-        border-radius: 20px !important;
-        box-shadow: 6px 8px 0px var(--ink) !important;
+        padding: 18px 16px !important;
+        border-radius: 18px !important;
+        box-shadow: 5px 6px 0px var(--ink) !important;
         aspect-ratio: auto !important;
-        min-height: 200px !important;
+        min-height: 195px !important;
       }
       .card-brand-logo {
-        height: 20px !important;
+        height: 19px !important;
       }
       .card-chip {
         font-size: 7.5px !important;
-        padding: 4px 10px !important;
+        padding: 3px 9px !important;
       }
       .card-number-text {
-        font-size: 28px !important;
+        font-size: 26px !important;
       }
       .card-badge-line {
-        font-size: 8.5px !important;
+        font-size: 8px !important;
       }
       .card-holder-name {
-        font-size: 14.5px !important;
+        font-size: 14px !important;
       }
       .card-campus-pill {
-        font-size: 11px !important;
+        font-size: 10.5px !important;
       }
       .color-picker-bar {
-        padding: 6px 14px !important;
-        gap: 10px !important;
+        padding: 5px 12px !important;
+        gap: 9px !important;
+        margin-bottom: 14px !important;
       }
       .interactive-toy-box {
-        padding: 18px 16px !important;
-        border-radius: 18px !important;
+        padding: 16px 14px !important;
+        border-radius: 16px !important;
         box-shadow: 4px 5px 0px var(--ink) !important;
       }
       .split-summary-bar {
@@ -1081,40 +1145,42 @@
         gap: 6px !important;
       }
       .form-card-box {
-        padding: 22px 16px !important;
-        border-radius: 20px !important;
+        padding: 20px 14px !important;
+        border-radius: 18px !important;
         box-shadow: 4px 5px 0px var(--ink) !important;
       }
       .form-box-title {
-        font-size: 19px !important;
+        font-size: 18px !important;
       }
       .input-box, .dropdown-box {
         height: 48px !important;
         font-size: 14px !important;
+        padding: 0 12px !important;
       }
       .btn-lock-pass {
-        height: 52px !important;
-        font-size: 14px !important;
-        padding: 0 18px !important;
+        height: 50px !important;
+        font-size: 13.5px !important;
+        padding: 0 16px !important;
       }
       .result-pioneer-pill {
-        font-size: 22px !important;
-        padding: 10px 20px !important;
+        font-size: 20px !important;
+        padding: 9px 18px !important;
         box-shadow: 3px 4px 0px var(--ink) !important;
       }
       .result-summary-card {
-        padding: 14px !important;
+        padding: 12px 14px !important;
       }
       .result-summary-row {
-        font-size: 12px !important;
+        font-size: 11.5px !important;
+        padding: 6px 0 !important;
       }
       .perks-visual-head {
         flex-direction: column !important;
         align-items: flex-start !important;
-        gap: 8px !important;
+        gap: 6px !important;
       }
       .perks-visual-head h3 {
-        font-size: 19px !important;
+        font-size: 18px !important;
       }
     }
   </style>
