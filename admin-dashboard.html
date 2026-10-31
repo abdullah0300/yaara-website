@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yaara Pioneer Campaign | Secure Operations Dashboard</title>
+  <link rel="icon" href="assets/icon.png">
+  <link rel="stylesheet" href="fonts.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --ivory: #F5F3ED;
+      --paper: #FFFEFA;
+      --ink: #17192C;
+      --cobalt: #4149E8;
+      --cobalt-hover: #323acb;
+      --lime: #E8F4A4;
+      --muted: #74766F;
+      --line: #DCDCD2;
+      --red-accent: #E14938;
+      --border-radius: 18px;
+    }
+
+    body {
+      background: var(--ivory);
+      color: var(--ink);
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* =========================================================================
+       1. SECURITY LOCK GATE MODAL / SCREEN
+       ========================================================================= */
+    #security-gate {
+      position: fixed;
+      inset: 0;
+      background: rgba(23, 25, 44, 0.94);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 9999;
+    }
+
+    .auth-card {
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      box-shadow: 10px 12px 0px var(--ink);
+      border-radius: 24px;
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 440px;
+      text-align: center;
+      animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalPop {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .auth-brand {
+      margin-bottom: 18px;
+    }
+    .auth-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--lime);
+      border: 1.5px solid var(--ink);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+    .auth-card h2 {
+      font-family: 'Manrope', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin: 0 0 8px;
+    }
+    .auth-card p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin: 0 0 24px;
+    }
+
+    .auth-input-wrap {
+      position: relative;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .auth-input-wrap label {
+      display: block;
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+    }
+    .auth-input {
+      width: 100%;
+      height: 52px;
+      background: #FFFFFF;
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      padding: 0 46px 0 16px;
+      font-size: 16px;
+      color: var(--ink);
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .auth-input:focus {
+      border-color: var(--cobalt);
+    }
+    .btn-toggle-eye {
+      position: absolute;
+      right: 12px;
+      bottom: 14px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      opacity: 0.6;
+    }
+    .btn-toggle-eye:hover { opacity: 1; }
+
+    .btn-unlock-dash {
+      width: 100%;
+      height: 52px;
+      background: var(--cobalt);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 100px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 14.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-unlock-dash:hover {
+      background: var(--cobalt-hover);
+      transform: translateY(-2px);
+    }
+    .btn-unlock-dash:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .auth-error-hint {
+      display: none;
+      background: #FFF2F0;
+      border: 1px solid #FFC9C4;
+      color: var(--red-accent);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .auth-error-hint.visible {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* =========================================================================
+       2. SECURE DASHBOARD VIEW (HIDDEN UNTIL AUTHENTICATED)
+       ========================================================================= */
+    #dashboard-view {
+      display: none;
+      padding: 30px 6% 60px;
+    }
+
+    .dash-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1.5px solid var(--ink);
+      padding-bottom: 18px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .dash-header-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .dash-header h1 {
+      font-family: 'Manrope', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin: 0;
+    }
+    .dash-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #E8F8F0;
+      border: 1px solid #B8E8D0;
+      color: #0E7846;
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+
+    .dash-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .dash-btn {
+      background: var(--paper);
+      color: var(--ink);
+      border: 1.5px solid var(--ink);
+      box-shadow: 2px 3px 0px var(--ink);
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-weight: 800;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.15s;
+    }
+    .dash-btn:hover {
+      transform: translateY(-1px);
+    }
+    .dash-btn.btn-export {
+      background: var(--ink);
+      color: #FFF;
+      box-shadow: 2px 3px 0px rgba(0,0,0,0.3);
+    }
+    .dash-btn.btn-logout {
+      background: #FFF2F0;
+      color: var(--red-accent);
+      border-color: var(--red-accent);
+      box-shadow: 2px 3px 0px var(--red-accent);
+    }
+
+    /* Metric Cards Grid */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .metric-card {
+      background: var(--paper);
+      border: 1.5px solid var(--ink);
+      box-shadow: 4px 5px 0px var(--ink);
+      border-radius: var(--border-radius);
+      padding: 20px;
+    }
+    .metric-card.highlight {
+      background: var(--lime);
+    }
+    .metric-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .metric-val {
+      font-family: 'Manrope', sans-serif;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+    }
+    .metric-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* Filter Toolbar */
+    .filter-toolbar {
+      background: var(--paper);
+      border: 1.5px solid var(--ink);
+      border-radius: 16px;
+      padding: 12px 18px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .search-input-box {
+      flex: 1;
+      min-width: 240px;
+      height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 0 14px;
+      font-size: 13.5px;
+      font-family: inherit;
+    }
+    .search-input-box:focus {
+      outline: none;
+      border-color: var(--cobalt);
+    }
+    .campus-select-filter {
+      height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 0 12px;
+      font-size: 13px;
+      font-family: inherit;
+      background: #FFF;
+      cursor: pointer;
+    }
+
+    /* Panels & Tables */
+    .panel {
+      background: var(--paper);
+      border: 1.5px solid var(--ink);
+      box-shadow: 5px 6px 0px var(--ink);
+      border-radius: var(--border-radius);
+      padding: 24px;
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+    .panel h2 {
+      font-family: 'Manrope', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin: 0 0 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed var(--line);
+      padding-bottom: 12px;
+    }
+    .panel-count-tag {
+      font-size: 11px;
+      font-weight: 800;
+      background: var(--lime);
+      padding: 3px 10px;
+      border-radius: 100px;
+      border: 1px solid var(--ink);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 600px;
+    }
+    th {
+      text-align: left;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      padding: 10px 8px;
+      border-bottom: 1.5px solid var(--line);
+    }
+    td {
+      padding: 12px 8px;
+      border-bottom: 1px solid #EFEFEA;
+      font-weight: 500;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    tr:hover td {
+      background: #FAF9F5;
+    }
+
+    .badge-pill {
+      font-size: 9px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 50px;
+      background: #E8F4A4;
+      color: var(--ink);
+    }
+    .badge-pass-num {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      color: var(--cobalt);
+    }
+    .badge-yes {
+      background: #E3F8EE;
+      color: #0E7846;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 50px;
+    }
+    .badge-no {
+      background: #F4F4EE;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 50px;
+    }
+
+    .sections-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 840px) {
+      .sections-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================================
+       1. SECURITY ACCESS GATE (LOCKOUT OVERLAY)
+       ========================================================================= -->
+  <div id="security-gate">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <img src="assets/logo.png" alt="Yaara" height="28">
+      </div>
+      <div class="auth-pill">🔒 Restricted Operations Portal</div>
+      <h2>Founder &amp; Admin Sign In</h2>
+      <p>Enter your secret admin passkey to decrypt live campus war signups, contact leads, and analytics.</p>
+
+      <div id="auth-error" class="auth-error-hint">
+        <span>⚠️ Invalid Admin Passkey. Access denied.</span>
+      </div>
+
+      <form id="auth-form" onsubmit="handleAuthSubmit(event)">
+        <div class="auth-input-wrap">
+          <label for="admin-passkey-input">Admin Passkey</label>
+          <input type="password" id="admin-passkey-input" class="auth-input" placeholder="Enter secret passkey" autocomplete="current-password" required>
+          <button type="button" class="btn-toggle-eye" onclick="togglePassVisibility()" title="Show/Hide passkey">👁️</button>
+        </div>
+
+        <button type="submit" id="btn-unlock" class="btn-unlock-dash">
+          <span id="btn-unlock-text">Unlock Dashboard</span>
+          <span>↗</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       2. SECURE DASHBOARD VIEW
+       ========================================================================= -->
+  <div id="dashboard-view">
+    <header class="dash-header">
+      <div class="dash-header-title">
+        <img src="assets/logo.png" alt="Yaara" height="26">
+        <div>
+          <h1>Campus Pioneer Ops Dashboard</h1>
+          <span class="dash-status-pill">● Encrypted Session Active</span>
+        </div>
+      </div>
+      <div class="dash-header-actions">
+        <button class="dash-btn" onclick="refreshDashboard()" title="Refresh records">
+          <span>🔄 Refresh</span>
+        </button>
+        <button class="dash-btn btn-export" onclick="exportCSV()">
+          <span>📥 Export CSV</span>
+        </button>
+        <button class="dash-btn btn-logout" onclick="handleLogout()" title="Lock dashboard">
+          <span>🔒 Log Out</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Metrics Grid -->
+    <div class="metric-grid">
+      <div class="metric-card highlight">
+        <div class="metric-label">Total Pioneers Registered</div>
+        <div class="metric-val" id="metric-total">0</div>
+        <div class="metric-sub">Verified campus leads</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Wallet &amp; Card Opt-In Rate</div>
+        <div class="metric-val" id="metric-wallet" style="color: var(--cobalt);">0%</div>
+        <div class="metric-sub">Group Expense Card demand</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Top Defending Campus</div>
+        <div class="metric-val" id="metric-top-campus" style="font-size: 26px;">--</div>
+        <div class="metric-sub">Leader in active student registrations</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Top Ambassador</div>
+        <div class="metric-val" id="metric-top-ref" style="font-size: 26px;">--</div>
+        <div class="metric-sub">Leading referral captain</div>
+      </div>
+    </div>
+
+    <!-- Filter & Search Toolbar -->
+    <div class="filter-toolbar">
+      <input type="text" id="filter-search" class="search-input-box" placeholder="🔍 Search by student name, email, phone, or campus..." oninput="applyFilters()">
+      <select id="filter-campus" class="campus-select-filter" onchange="applyFilters()">
+        <option value="ALL">All Campuses</option>
+        <option value="FAST">FAST-NUCES</option>
+        <option value="UOL">UOL Lahore</option>
+        <option value="COMSATS">COMSATS</option>
+        <option value="NUST">NUST</option>
+        <option value="LUMS">LUMS</option>
+        <option value="PU">Punjab University</option>
+        <option value="UET">UET Lahore</option>
+        <option value="OTHER">Other</option>
+      </select>
+    </div>
+
+    <!-- Main Live Pioneer Ledger Table -->
+    <div class="panel">
+      <h2>
+        <span>📋 Verified Pioneer Signups Ledger</span>
+        <span class="panel-count-tag" id="ledger-count">0 Records</span>
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Pass #</th>
+            <th>Full Name</th>
+            <th>Email Address</th>
+            <th>WhatsApp Number</th>
+            <th>Campus</th>
+            <th>Ref Code</th>
+            <th>Wallet Pass</th>
+            <th>Date Registered</th>
+          </tr>
+        </thead>
+        <tbody id="pioneer-rows">
+          <tr><td colspan="8" style="text-align:center; color:var(--muted); padding: 24px;">Loading verified records...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Secondary Grids: Campus Standings & Ambassador Breakdown -->
+    <div class="sections-grid">
+      <!-- Campus Performance -->
+      <div class="panel">
+        <h2>🏆 Campus Standings</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Campus</th>
+              <th>Pioneers</th>
+              <th>Share</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="campus-rows">
+            <tr><td colspan="4" style="text-align:center; color:var(--muted);">Calculating standings...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Ambassador / Ref Tracker -->
+      <div class="panel">
+        <h2>👑 Ambassador Captain Tracker</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Ambassador Code</th>
+              <th>Referred Signups</th>
+              <th>Rank</th>
+            </tr>
+          </thead>
+          <tbody id="ambassador-rows">
+            <tr><td colspan="3" style="text-align:center; color:var(--muted);">Loading referral rankings...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Security & Dashboard Controller Script -->
+  <script>
+    const SUPABASE_URL = "https://omtdlmaxoybkrjhoetkr.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_YqnffITilWuo6CgbR5RmKA_nIKR1U2D";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const SESSION_KEY = "yaara_ops_admin_token";
+    let allPioneers = [];
+    let currentPasskey = "";
+
+    // 1. Password Visibility Toggle
+    function togglePassVisibility() {
+      const input = document.getElementById('admin-passkey-input');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    // 2. Authentication Handler
+    async function handleAuthSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('admin-passkey-input');
+      const passkey = input.value.trim();
+      const errBox = document.getElementById('auth-error');
+      const unlockBtn = document.getElementById('btn-unlock');
+      const unlockText = document.getElementById('btn-unlock-text');
+
+      errBox.classList.remove('visible');
+      unlockBtn.disabled = true;
+      unlockText.innerText = 'Verifying Passkey...';
+
+      try {
+        const { data, error } = await supabase.rpc('get_admin_pioneers', { admin_secret: passkey });
+
+        if (error || !data) {
+          errBox.classList.add('visible');
+          unlockBtn.disabled = false;
+          unlockText.innerText = 'Unlock Dashboard';
+          input.value = '';
+          input.focus();
+          return;
+        }
+
+        // Authentication Success: Store in SessionStorage
+        currentPasskey = passkey;
+        sessionStorage.setItem(SESSION_KEY, passkey);
+
+        unlockBtn.disabled = false;
+        unlockText.innerText = 'Unlock Dashboard';
+
+        // Reveal Dashboard
+        document.getElementById('security-gate').style.display = 'none';
+        document.getElementById('dashboard-view').style.display = 'block';
+
+        allPioneers = data;
+        renderAll(data);
+
+      } catch (err) {
+        console.error('Auth error:', err);
+        errBox.classList.add('visible');
+        unlockBtn.disabled = false;
+        unlockText.innerText = 'Unlock Dashboard';
+      }
+    }
+
+    // 3. Auto-Login from Active Session
+    async function checkExistingSession() {
+      const savedPass = sessionStorage.getItem(SESSION_KEY);
+      if (savedPass) {
+        currentPasskey = savedPass;
+        try {
+          const { data, error } = await supabase.rpc('get_admin_pioneers', { admin_secret: savedPass });
+          if (!error && data) {
+            document.getElementById('security-gate').style.display = 'none';
+            document.getElementById('dashboard-view').style.display = 'block';
+            allPioneers = data;
+            renderAll(data);
+            return;
+          }
+        } catch (e) {}
+        sessionStorage.removeItem(SESSION_KEY);
+      }
+      document.getElementById('security-gate').style.display = 'flex';
+      document.getElementById('dashboard-view').style.display = 'none';
+    }
+
+    // 4. Logout / Relock
+    function handleLogout() {
+      sessionStorage.removeItem(SESSION_KEY);
+      currentPasskey = "";
+      allPioneers = [];
+      document.getElementById('dashboard-view').style.display = 'none';
+      document.getElementById('security-gate').style.display = 'flex';
+      document.getElementById('admin-passkey-input').value = '';
+      document.getElementById('auth-error').classList.remove('visible');
+    }
+
+    // 5. Refresh Records
+    async function refreshDashboard() {
+      if (!currentPasskey) return;
+      try {
+        const { data, error } = await supabase.rpc('get_admin_pioneers', { admin_secret: currentPasskey });
+        if (!error && data) {
+          allPioneers = data;
+          applyFilters();
+        }
+      } catch (e) {}
+    }
+
+    // 6. Filtering & Search
+    function applyFilters() {
+      const query = (document.getElementById('filter-search').value || '').toLowerCase().trim();
+      const campusFilter = document.getElementById('filter-campus').value;
+
+      let filtered = allPioneers.filter(item => {
+        const matchCampus = campusFilter === 'ALL' || item.campus === campusFilter;
+        if (!matchCampus) return false;
+
+        if (!query) return true;
+        const nameMatch = (item.name || '').toLowerCase().includes(query);
+        const emailMatch = (item.email || '').toLowerCase().includes(query);
+        const phoneMatch = (item.phone || '').toLowerCase().includes(query);
+        const campusMatch = (item.campus || '').toLowerCase().includes(query);
+        const refMatch = (item.ambassador_code || '').toLowerCase().includes(query);
+        return nameMatch || emailMatch || phoneMatch || campusMatch || refMatch;
+      });
+
+      renderAll(filtered, true);
+    }
+
+    // 7. Render All Views
+    function renderAll(data, isFiltered = false) {
+      // Metrics (always based on full dataset)
+      const baseData = allPioneers;
+      document.getElementById('metric-total').innerText = baseData.length;
+      const walletYes = baseData.filter(d => d.wallet_interest).length;
+      const percent = baseData.length ? Math.round((walletYes / baseData.length) * 100) : 0;
+      document.getElementById('metric-wallet').innerText = `${percent}%`;
+
+      const campusMap = {};
+      const refMap = {};
+
+      baseData.forEach(d => {
+        campusMap[d.campus] = (campusMap[d.campus] || 0) + 1;
+        if (d.ambassador_code) {
+          refMap[d.ambassador_code] = (refMap[d.ambassador_code] || 0) + 1;
+        }
+      });
+
+      const topCampus = Object.entries(campusMap).sort((a,b) => b[1]-a[1])[0];
+      const topRef = Object.entries(refMap).sort((a,b) => b[1]-a[1])[0];
+
+      if (topCampus) document.getElementById('metric-top-campus').innerText = topCampus[0];
+      if (topRef) document.getElementById('metric-top-ref').innerText = topRef[0];
+
+      // Render Ledger Table
+      document.getElementById('ledger-count').innerText = `${data.length} Records`;
+      let lHtml = '';
+      if (!data.length) {
+        lHtml = '<tr><td colspan="8" style="text-align:center; color:var(--muted); padding: 24px;">No matching records found.</td></tr>';
+      } else {
+        data.forEach(p => {
+          const formattedNum = `#${String(p.pioneer_number).padStart(4, '0')}`;
+          const dateStr = p.created_at ? new Date(p.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '--';
+          const walletBadge = p.wallet_interest ? '<span class="badge-yes">✓ Priority</span>' : '<span class="badge-no">Opt-Out</span>';
+          lHtml += `
+            <tr>
+              <td><span class="badge-pass-num">${formattedNum}</span></td>
+              <td><b>${escapeHtml(p.name)}</b></td>
+              <td>${escapeHtml(p.email || '—')}</td>
+              <td>${escapeHtml(p.phone || '—')}</td>
+              <td><span class="badge-pill">${escapeHtml(p.campus)}</span></td>
+              <td>${p.ambassador_code ? `<b>${escapeHtml(p.ambassador_code)}</b>` : '—'}</td>
+              <td>${walletBadge}</td>
+              <td style="color:var(--muted); font-size:12px;">${dateStr}</td>
+            </tr>
+          `;
+        });
+      }
+      document.getElementById('pioneer-rows').innerHTML = lHtml;
+
+      // Render Campus Table
+      let cHtml = '';
+      const totalSignups = baseData.length || 1;
+      Object.entries(campusMap).sort((a,b) => b[1]-a[1]).forEach(([camp, count], idx) => {
+        const share = Math.round((count / totalSignups) * 100);
+        cHtml += `
+          <tr>
+            <td><b>${escapeHtml(camp)}</b></td>
+            <td>${count}</td>
+            <td>${share}%</td>
+            <td><span class="badge-pill">#${idx + 1} Rank</span></td>
+          </tr>
+        `;
+      });
+      document.getElementById('campus-rows').innerHTML = cHtml || '<tr><td colspan="4" style="text-align:center;">No campus data</td></tr>';
+
+      // Render Ambassador Table
+      let rHtml = '';
+      Object.entries(refMap).sort((a,b) => b[1]-a[1]).forEach(([ref, count], idx) => {
+        rHtml += `
+          <tr>
+            <td><b>${escapeHtml(ref)}</b></td>
+            <td>${count}</td>
+            <td><span class="badge-pill">#${idx + 1}</span></td>
+          </tr>
+        `;
+      });
+      document.getElementById('ambassador-rows').innerHTML = rHtml || '<tr><td colspan="3" style="text-align:center;">No ambassador referrals yet</td></tr>';
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // 8. CSV Export with Decrypted Details
+    function exportCSV() {
+      if (!allPioneers.length) {
+        alert("No records to export!");
+        return;
+      }
+      let csv = "Pioneer Number,Name,Email,Phone,Campus,Ambassador Code,Wallet Interest,Date Registered\n";
+      allPioneers.forEach(s => {
+        csv += `"${s.pioneer_number}","${escapeCsv(s.name)}","${escapeCsv(s.email)}","${escapeCsv(s.phone)}","${escapeCsv(s.campus)}","${escapeCsv(s.ambassador_code)}","${s.wallet_interest}","${s.created_at}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('href', url);
+      a.setAttribute('download', `yaara_pioneer_leads_${new Date().toISOString().slice(0,10)}.csv`);
+      a.click();
+    }
+
+    function escapeCsv(val) {
+      if (!val) return '';
+      return String(val).replace(/"/g, '""');
+    }
+
+    // Initial session check
+    checkExistingSession();
+  </script>
+</body>
+</html>

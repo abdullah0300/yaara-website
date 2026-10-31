@@ -1,0 +1,1743 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F5F3ED">
+  <title>Yaara Campus Clash 2026 | Which University Rules?</title>
+  <meta name="description" content="FAST vs UOL vs COMSATS vs NUST. Join the campus war, claim your permanent Pioneer Pass, defend your university rank, and split expenses effortlessly.">
+  <link rel="canonical" href="https://yaara.site/join.html">
+  <meta name="keywords" content="Yaara, Campus Clash, University War, FAST, UOL, COMSATS, NUST, Pioneer Pass, student expense split app Pakistan, hostel split bill">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://yaara.site/join.html">
+  <meta property="og:title" content="Yaara Campus Clash 2026 | Which University Rules?">
+  <meta property="og:description" content="FAST vs UOL vs COMSATS vs NUST. Join the campus war, claim your permanent Pioneer Pass, defend your university rank, and split expenses effortlessly.">
+  <meta property="og:image" content="https://yaara.site/assets/logo.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://yaara.site/join.html">
+  <meta name="twitter:title" content="Yaara Campus Clash 2026 | Which University Rules?">
+  <meta name="twitter:description" content="FAST vs UOL vs COMSATS vs NUST. Join the campus war, claim your permanent Pioneer Pass, defend your university rank, and split expenses effortlessly.">
+  <meta name="twitter:image" content="https://yaara.site/assets/logo.png">
+  <link rel="icon" href="assets/icon.png">
+
+  <!-- Core Website Styles -->
+  <link rel="stylesheet" href="fonts.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="navigation.css">
+  <link rel="stylesheet" href="footer-polish.css">
+
+  <!-- Official Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --ivory: #F5F3ED;
+      --paper: #FFFEFA;
+      --ink: #17192C;
+      --cobalt: #4149E8;
+      --cobalt-hover: #323acb;
+      --lime: #E8F4A4;
+      --muted: #74766F;
+      --line: #DCDCD2;
+      --red-accent: #E14938;
+      --ease: cubic-bezier(.22, 1, .36, 1);
+    }
+
+    body {
+      background: var(--ivory);
+      color: var(--ink);
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    .clash-stage {
+      padding-top: 130px;
+      padding-bottom: 90px;
+    }
+
+    /* =========================================================================
+       HERO: UNIVERSITY RIVALRY HEADLINE ("WHICH CAMPUS RULES?")
+       ========================================================================= */
+    .clash-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--lime);
+      border: 1.5px solid var(--ink);
+      box-shadow: 3px 3px 0px var(--ink);
+      border-radius: 100px;
+      padding: 6px 16px 6px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: 20px;
+    }
+    .clash-badge-pill .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--red-accent);
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(225, 73, 56, 0.6); }
+      70% { box-shadow: 0 0 0 7px rgba(225, 73, 56, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(225, 73, 56, 0); }
+    }
+
+    .clash-hero-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: clamp(44px, 6.2vw, 84px);
+      font-weight: 800;
+      line-height: 0.98;
+      letter-spacing: -0.06em;
+      margin: 0 0 16px;
+    }
+    .clash-hero-title span.vs-tag {
+      font-family: Georgia, serif;
+      font-style: italic;
+      color: var(--red-accent);
+      font-weight: normal;
+    }
+    .clash-hero-title span.cobalt-accent {
+      color: var(--cobalt);
+    }
+    .clash-hero-sub {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--muted);
+      max-width: 620px;
+      margin-bottom: 35px;
+    }
+
+    /* =========================================================================
+       THE ARENA: LIVE CAMPUS DUEL SCOREBOARD (TOP BAR)
+       ========================================================================= */
+    .arena-scoreboard {
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      box-shadow: 8px 10px 0px var(--ink);
+      border-radius: 26px;
+      padding: 24px 28px;
+      margin-bottom: 45px;
+    }
+    .arena-top-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .arena-top-line h3 {
+      font-family: 'Manrope', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .arena-top-line span.live-status {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cobalt);
+    }
+
+    /* Live Progress Duel Bars */
+    .duel-meters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+    }
+    .meter-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--line);
+      border-radius: 16px;
+      padding: 14px 16px;
+      position: relative;
+      transition: transform 0.2s;
+    }
+    .meter-card.rank-1 {
+      border-color: var(--ink);
+      background: #FAFAF4;
+    }
+    .meter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .meter-campus-name {
+      font-family: 'Manrope', sans-serif;
+      font-size: 13.5px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+    .meter-badge {
+      font-size: 8.5px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 100px;
+      background: var(--line);
+      color: var(--ink);
+    }
+    .meter-card.rank-1 .meter-badge {
+      background: var(--lime);
+      color: var(--ink);
+      border: 1px solid var(--ink);
+    }
+    .meter-progress-track {
+      height: 8px;
+      background: var(--line);
+      border-radius: 100px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .meter-progress-fill {
+      height: 100%;
+      border-radius: 100px;
+      background: var(--cobalt);
+      transition: width 1s var(--ease);
+    }
+    .meter-card.rank-1 .meter-progress-fill {
+      background: #17192C;
+    }
+    .meter-footer {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10.5px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .meter-count-number {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    /* =========================================================================
+       2-COLUMN CORE: INTERACTIVE 3D CARD vs JOIN TO DEFEND CAMPUS
+       ========================================================================= */
+    .battle-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.05fr;
+      gap: 38px;
+      align-items: start;
+    }
+    @media (max-width: 950px) {
+      .battle-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* LEFT: Real-Time 3D Card Preview */
+    .card-anchor-sticky {
+      position: sticky;
+      top: 110px;
+    }
+    .preview-card-wrap {
+      perspective: 1000px;
+      margin-bottom: 22px;
+    }
+    .pioneer-pass-card {
+      width: 100%;
+      aspect-ratio: 1.58 / 1;
+      border-radius: 26px;
+      background: var(--ink);
+      color: #FFFFFF;
+      padding: 30px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 2px solid var(--ink);
+      box-shadow: 10px 14px 0px var(--ink);
+      transition: transform 0.2s cubic-bezier(0.1, 0.9, 0.2, 1), background 0.4s var(--ease);
+      transform-style: preserve-3d;
+    }
+    .pioneer-pass-card::after {
+      content: '';
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232, 244, 164, 0.25) 0%, transparent 70%);
+      top: -70px;
+      right: -70px;
+      pointer-events: none;
+    }
+    /* Swatch Themes */
+    .card-theme-ink { background: var(--ink); color: #FFFFFF; }
+    .card-theme-cobalt { background: linear-gradient(135deg, #4149E8 0%, #171A5E 100%); color: #FFFFFF; }
+    .card-theme-lime { background: var(--lime); color: var(--ink); }
+    .card-theme-lime .card-chip { background: var(--ink); color: #FFFFFF; }
+    .card-theme-lime .card-number-text { color: var(--ink); }
+    .card-theme-lime .card-brand-logo { filter: none; }
+
+    .card-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    .card-brand-logo {
+      height: 24px;
+      filter: brightness(0) invert(1);
+    }
+    .card-chip {
+      font-size: 8.5px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.14);
+      padding: 5px 12px;
+      border-radius: 100px;
+    }
+    .card-number-pod {
+      position: relative;
+      z-index: 2;
+      margin: 12px 0;
+    }
+    .card-number-text {
+      font-family: 'Manrope', sans-serif;
+      font-size: clamp(26px, 3.2vw, 38px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--lime);
+      line-height: 1;
+    }
+    .card-badge-line {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-top: 5px;
+    }
+    .card-bottom-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      position: relative;
+      z-index: 2;
+    }
+    .card-holder-name {
+      font-family: 'Manrope', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    .card-meta-label {
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.65;
+      margin-bottom: 2px;
+    }
+    .card-campus-pill {
+      font-family: 'Manrope', sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+
+    /* Swatches */
+    .color-picker-bar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: #FFFFFF;
+      border: 1.5px solid var(--line);
+      border-radius: 100px;
+      padding: 7px 16px;
+      width: fit-content;
+      margin-bottom: 20px;
+    }
+    .color-picker-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .theme-swatch {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #FFFFFF;
+      cursor: pointer;
+      box-shadow: 0 0 0 1px var(--line);
+      transition: transform 0.2s;
+    }
+    .theme-swatch:hover { transform: scale(1.15); }
+    .theme-swatch.active { box-shadow: 0 0 0 2px var(--cobalt); }
+    .swatch-ink { background: #17192C; }
+    .swatch-cobalt { background: #4149E8; }
+    .swatch-lime { background: #E8F4A4; }
+
+    /* Interactive Live Bill Toy */
+    .interactive-toy-box {
+      background: var(--paper);
+      border: 1.5px solid var(--ink);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: 6px 7px 0px var(--ink);
+    }
+    .toy-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .toy-header strong {
+      font-size: 13.5px;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+    }
+    .toy-header span {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--cobalt);
+    }
+    .bill-slider {
+      width: 100%;
+      accent-color: var(--cobalt);
+      cursor: pointer;
+    }
+    .split-summary-bar {
+      background: #F4F4EC;
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .split-summary-bar small {
+      font-size: 9.5px;
+      color: var(--muted);
+      font-weight: 700;
+      display: block;
+    }
+    .split-summary-bar strong {
+      font-family: 'Manrope', sans-serif;
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--cobalt);
+    }
+
+    /* RIGHT: Registration & Ground Leadership */
+    .action-battle-column {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .form-card-box {
+      background: var(--paper);
+      border: 1.5px solid var(--ink);
+      box-shadow: 8px 10px 0px var(--ink);
+      border-radius: 26px;
+      padding: 34px 30px;
+    }
+    .form-box-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+    }
+    .form-box-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 22px;
+      line-height: 1.5;
+    }
+    .form-group-item {
+      margin-bottom: 16px;
+    }
+    .form-label-tag {
+      display: block;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .input-box, .dropdown-box {
+      width: 100%;
+      height: 52px;
+      background: #FFFFFF;
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      padding: 0 16px;
+      font-size: 15px;
+      color: var(--ink);
+      font-family: inherit;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+    .input-box:focus, .dropdown-box:focus {
+      outline: none;
+      border-color: var(--cobalt);
+    }
+    .input-box.is-invalid, .dropdown-box.is-invalid {
+      border-color: var(--red-accent) !important;
+      background-color: #FFF9F8 !important;
+      box-shadow: 0 0 0 3px rgba(225, 73, 56, 0.12) !important;
+    }
+    .field-error-hint {
+      display: none;
+      align-items: center;
+      gap: 5px;
+      color: var(--red-accent);
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+    .field-error-hint.visible {
+      display: flex;
+    }
+
+    /* Group Card Priority Box */
+    .card-waitlist-callout {
+      background: #F2F4FF;
+      border: 1.5px dashed var(--cobalt);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin: 18px 0;
+      cursor: pointer;
+    }
+    .card-waitlist-callout input {
+      margin-top: 3px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--cobalt);
+    }
+    .card-waitlist-callout strong {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--cobalt);
+    }
+    .card-waitlist-callout span {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+
+    .btn-lock-pass {
+      width: 100%;
+      height: 56px;
+      background: var(--cobalt);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 100px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .btn-lock-pass:hover {
+      background: var(--cobalt-hover);
+      transform: translateY(-2px);
+    }
+    .btn-lock-pass:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Result View */
+    .result-celebration {
+      display: none;
+      text-align: center;
+      padding: 6px 0 10px;
+      animation: passFadeIn 0.4s ease-out;
+    }
+    @keyframes passFadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .result-badge-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cobalt);
+      background: #EEF1FD;
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 12px;
+    }
+    .result-pioneer-pill {
+      background: var(--lime);
+      border: 2px solid var(--ink);
+      box-shadow: 5px 6px 0px var(--ink);
+      padding: 14px 28px;
+      border-radius: 100px;
+      margin: 4px auto 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      transform: rotate(-1.5deg);
+    }
+    .result-summary-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--line);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin: 18px 0 20px;
+      text-align: left;
+    }
+    .result-summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px dashed #E5E5DD;
+      font-size: 13px;
+    }
+    .result-summary-row:last-child {
+      border-bottom: none;
+    }
+    .result-summary-label {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .result-summary-value {
+      color: var(--ink);
+      font-weight: 800;
+      font-family: 'Manrope', sans-serif;
+      text-align: right;
+    }
+    .result-summary-value.tag-success {
+      color: #10B981;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .result-actions-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .btn-share-whatsapp {
+      width: 100%;
+      height: 52px;
+      background: #25D366;
+      color: #FFFFFF;
+      border: 1.5px solid var(--ink);
+      box-shadow: 4px 5px 0px var(--ink);
+      border-radius: 100px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-sizing: border-box;
+    }
+    .btn-share-whatsapp:hover {
+      transform: translateY(-2px);
+      box-shadow: 4px 7px 0px var(--ink);
+    }
+    .btn-copy-ref {
+      width: 100%;
+      height: 50px;
+      background: #FFFFFF;
+      color: var(--ink);
+      border: 1.5px solid var(--ink);
+      box-shadow: 3px 4px 0px var(--ink);
+      border-radius: 100px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 13.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s, transform 0.15s;
+      box-sizing: border-box;
+    }
+    .btn-copy-ref:hover {
+      background: #F4F4EC;
+      transform: translateY(-1px);
+    }
+
+    /* =========================================================================
+       AWWWARDS RICH VISUAL PERKS MOCKUP (REPLACING THE FLAT CARD)
+       ========================================================================= */
+    .perks-visual-stage {
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      box-shadow: 8px 10px 0px var(--ink);
+      border-radius: 26px;
+      padding: 30px;
+      position: relative;
+    }
+    .perks-visual-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1.5px solid var(--ink);
+      padding-bottom: 14px;
+      margin-bottom: 22px;
+    }
+    .perks-visual-head h3 {
+      font-family: 'Manrope', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+    .perks-visual-head h3 span {
+      color: var(--cobalt);
+    }
+    .perks-visual-head span.criteria-pill {
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--lime);
+      padding: 4px 10px;
+      border-radius: 100px;
+      border: 1px solid var(--ink);
+    }
+
+    /* 4 Distinct Visual Mockup Cards */
+    .visual-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 540px) {
+      .visual-cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Card 1: Tangible Certificate Paper Mockup */
+    .v-card-certificate {
+      background: #FDFCFA;
+      border: 1.5px solid #D6D6C8;
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 6px 16px rgba(23, 25, 44, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+    .mock-cert-diploma {
+      background: #FFF;
+      border: 1px solid #E2E2D5;
+      border-radius: 10px;
+      padding: 12px 14px;
+      position: relative;
+      margin-bottom: 12px;
+      box-shadow: 2px 3px 0px rgba(0,0,0,0.06);
+    }
+    .cert-seal {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #D4AF37;
+      color: #FFF;
+      font-size: 9px;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      box-shadow: 0 2px 6px rgba(212, 175, 55, 0.4);
+    }
+    .mock-cert-line {
+      height: 4px;
+      background: #ECECE4;
+      border-radius: 2px;
+      margin-bottom: 6px;
+    }
+    .mock-cert-title {
+      font-family: Georgia, serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .mock-cert-url {
+      font-size: 7.5px;
+      font-weight: 700;
+      color: var(--cobalt);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* Card 2: Physical Metal Pioneer Badge & Merch */
+    .v-card-merch {
+      background: #FAF8F2;
+      border: 1.5px solid #D6D6C8;
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 6px 16px rgba(23, 25, 44, 0.05);
+    }
+    .merch-stage-display {
+      height: 78px;
+      background: linear-gradient(135deg, #17192C 0%, #2A2E4D 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      position: relative;
+      margin-bottom: 12px;
+    }
+    .metal-pin-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FFF2A8 0%, #C49B2E 100%);
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+      display: grid;
+      place-items: center;
+      font-family: 'Manrope', sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      color: #382800;
+      letter-spacing: -0.04em;
+      transform: rotate(-8deg);
+    }
+    .sticker-drop-pill {
+      background: var(--lime);
+      color: var(--ink);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 50px;
+      border: 1px solid var(--ink);
+      transform: rotate(6deg);
+    }
+
+    /* Card 3: Founder Recommendation Letter */
+    .v-card-rec {
+      background: #F4F6FD;
+      border: 1.5px solid #D1D8F4;
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 6px 16px rgba(23, 25, 44, 0.05);
+    }
+    .mock-linkedin-card {
+      background: #FFFFFF;
+      border: 1px solid #DCE3F8;
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      box-shadow: 0 3px 8px rgba(65, 73, 232, 0.06);
+    }
+    .rec-top-author {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .rec-author-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--cobalt);
+      color: #FFF;
+      font-size: 9px;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+    }
+    .rec-author-meta {
+      font-size: 8px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .rec-author-meta small {
+      display: block;
+      color: var(--muted);
+      font-size: 7px;
+    }
+    .rec-snippet-quote {
+      font-family: Georgia, serif;
+      font-style: italic;
+      font-size: 10px;
+      color: #4A4E69;
+      line-height: 1.35;
+    }
+
+    /* Card 4: VIP Hall of Fame Status */
+    .v-card-vip {
+      background: linear-gradient(135deg, #17192C 0%, #202444 100%);
+      color: #FFFFFF;
+      border: 1.5px solid #17192C;
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 6px 16px rgba(23, 25, 44, 0.12);
+    }
+    .vip-trophy-display {
+      height: 78px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px dashed rgba(255, 255, 255, 0.18);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+    .vip-trophy-display span.trophy {
+      font-size: 26px;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .vip-trophy-display span.lead-label {
+      font-size: 7.5px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--lime);
+    }
+
+    .v-card-body strong {
+      font-family: 'Manrope', sans-serif;
+      font-size: 13.5px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: block;
+      margin-bottom: 3px;
+    }
+    .v-card-body p {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.45;
+      margin: 0;
+    }
+    .v-card-vip .v-card-body strong {
+      color: #FFFFFF;
+    }
+    .v-card-vip .v-card-body p {
+      color: #A3A7BE;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================================
+       OFFICIAL YAARA NAVIGATION BAR
+       ========================================================================= -->
+  <header class="nav-wrap yaara-header" data-menu-open="false">
+    <nav class="yaara-nav" aria-label="Main navigation">
+      <a href="./" class="yaara-brand" aria-label="Yaara home">
+        <img src="assets/logo.png" alt="Yaara" width="135" height="36">
+      </a>
+      <div class="yaara-navigation" id="yaara-navigation">
+        <a class="yaara-nav-link" href="./#the-story"><span>The story</span></a>
+        <a class="yaara-nav-link" href="./#how-it-works"><span>How it works</span></a>
+        <a class="yaara-nav-link" href="./#questions"><span>Questions</span></a>
+        <a class="yaara-nav-link" href="students.html"><span>For students</span></a>
+        <a class="yaara-nav-link campus-war-link" href="join.html"><span style="color:var(--cobalt);font-weight:700;">⚔️ Campus War</span></a>
+      </div>
+      <a class="yaara-download-nav yaara-play-link" id="nav-apk-download" href="https://play.google.com/store/apps/details?id=com.webcraftio.saath&pcampaignid=web_share" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" style="flex-shrink:0"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-1.0001s.4482-.9997.9993-.9997c.5516 0 .9997.4482.9997.9997 0 .5515-.4481 1.0001-.9997 1.0001m-11.046 0c-.5511 0-.9993-.4486-.9993-1.0001s.4482-.9997.9993-.9997c.5516 0 .9997.4482.9997.9997 0 .5515-.4481 1.0001-.9997 1.0001m11.4045-6.02l1.997-3.459a.416.416 0 00-.152-.5674.416.416 0 00-.5674.152l-2.0223 3.503C15.5902 8.4116 13.8533 8 12 8s-3.5902.4116-5.1368 1.4499L4.841 5.9469a.416.416 0 00-.5674-.152.416.416 0 00-.152.5674l1.997 3.459C2.6877 11.5369 0 15.6888 0 20.4853h24c0-4.7965-2.6877-8.9484-6.1185-11.1639"/></svg>
+        <span>Get on Google Play</span>
+        <span class="yaara-download-arrow" aria-hidden="true">↗</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- =========================================================================
+       HERO: UNIVERSITY RIVALRY BATTLE
+       ========================================================================= -->
+  <main class="clash-stage section-pad">
+    
+    <!-- Top Live Tag -->
+    <div class="clash-badge-pill">
+      <span class="pulse-dot"></span>
+      <span id="clash-badge-text">National Campus War · Batch #01 Live</span>
+    </div>
+
+    <!-- Main Title Focused on the University Fight -->
+    <h1 class="clash-hero-title">
+      Which campus <span class="cobalt-accent">rules?</span><br>
+      FAST <span class="vs-tag">vs</span> UOL <span class="vs-tag">vs</span> NUST.
+    </h1>
+    <p class="clash-hero-sub">
+      Every student who joins defends their university. Claim your numbered Pioneer Pass, add your circle, and push your campus to #1 in Pakistan.
+    </p>
+
+    <!-- LIVE SCOREBOARD ARENA (THE FIGHT) -->
+    <section class="arena-scoreboard">
+      <div class="arena-top-line">
+        <h3>⚔️ Live Campus Standings</h3>
+        <span class="live-status">● Live Sync Active</span>
+      </div>
+
+      <div class="duel-meters-grid">
+        <!-- FAST -->
+        <div class="meter-card rank-1">
+          <div class="meter-header">
+            <span class="meter-campus-name">FAST-NUCES</span>
+            <span class="meter-badge">#1 Defending Champion</span>
+          </div>
+          <div class="meter-progress-track">
+            <div class="meter-progress-fill" style="width: 78%;"></div>
+          </div>
+          <div class="meter-footer">
+            <span>Pioneers Registered</span>
+            <span class="meter-count-number" id="meter-fast">142</span>
+          </div>
+        </div>
+
+        <!-- UOL -->
+        <div class="meter-card">
+          <div class="meter-header">
+            <span class="meter-campus-name">UOL Lahore</span>
+            <span class="meter-badge">#2 Challenger (+12 today)</span>
+          </div>
+          <div class="meter-progress-track">
+            <div class="meter-progress-fill" style="width: 58%;"></div>
+          </div>
+          <div class="meter-footer">
+            <span>Pioneers Registered</span>
+            <span class="meter-count-number" id="meter-uol">98</span>
+          </div>
+        </div>
+
+        <!-- COMSATS -->
+        <div class="meter-card">
+          <div class="meter-header">
+            <span class="meter-campus-name">COMSATS</span>
+            <span class="meter-badge">#3 Contender</span>
+          </div>
+          <div class="meter-progress-track">
+            <div class="meter-progress-fill" style="width: 38%;"></div>
+          </div>
+          <div class="meter-footer">
+            <span>Pioneers Registered</span>
+            <span class="meter-count-number" id="meter-comsats">64</span>
+          </div>
+        </div>
+
+        <!-- NUST -->
+        <div class="meter-card">
+          <div class="meter-header">
+            <span class="meter-campus-name">NUST Islamabad</span>
+            <span class="meter-badge">#4 Rising</span>
+          </div>
+          <div class="meter-progress-track">
+            <div class="meter-progress-fill" style="width: 25%;"></div>
+          </div>
+          <div class="meter-footer">
+            <span>Pioneers Registered</span>
+            <span class="meter-count-number" id="meter-nust">41</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         THE BATTLEFIELD GRID: 3D PASS vs CLAIM FORM & REWARDS
+         ========================================================================= -->
+    <div class="battle-grid">
+      
+      <!-- LEFT: Live Interactive 3D Card Studio & Split Demo -->
+      <div class="card-anchor-sticky">
+        
+        <!-- Swatches -->
+        <div class="color-picker-bar">
+          <span class="color-picker-label">Pass Theme:</span>
+          <div class="theme-swatch swatch-ink active" data-theme="card-theme-ink" title="Obsidian Midnight"></div>
+          <div class="theme-swatch swatch-cobalt" data-theme="card-theme-cobalt" title="Digital Cobalt"></div>
+          <div class="theme-swatch swatch-lime" data-theme="card-theme-lime" title="Electric Lime"></div>
+        </div>
+
+        <!-- 3D Card -->
+        <div class="preview-card-wrap">
+          <div class="pioneer-pass-card card-theme-ink" id="interactive-card">
+            <div class="card-top-row">
+              <img src="assets/logo.png" alt="Yaara" class="card-brand-logo">
+              <div class="card-chip">CAMPUS CLASH PASS</div>
+            </div>
+
+            <div class="card-number-pod">
+              <div class="card-number-text" id="preview-number">#0042</div>
+              <div class="card-badge-line">PERMANENT PIONEER STATUS</div>
+            </div>
+
+            <div class="card-bottom-row">
+              <div>
+                <div class="card-meta-label">PASS HOLDER</div>
+                <div class="card-holder-name" id="preview-name">YOUR NAME</div>
+              </div>
+              <div style="text-align: right;">
+                <div class="card-meta-label">REPRESENTING</div>
+                <div class="card-campus-pill" id="preview-campus">UOL LAHORE</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Bill Split Toy -->
+        <div class="interactive-toy-box">
+          <div class="toy-header">
+            <strong>See what Yaara saves your squad</strong>
+            <span>Live Split</span>
+          </div>
+          <input type="range" min="1000" max="15000" step="200" value="4800" class="bill-slider" id="bill-range">
+          <div class="split-summary-bar">
+            <div>
+              <small>Dinner / Chai Split (4 People):</small>
+              <span id="slider-bill-val" style="font-size:12px; font-weight:800; color:var(--ink);">Total Rs 4,800</span>
+            </div>
+            <strong id="split-per-person">Rs 1,200 <span style="font-size:11px; font-weight:500;">/ head</span></strong>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Form & High-Prestige Ambassador Visual Cards -->
+      <div class="action-battle-column">
+        
+        <!-- Registration Form Box -->
+        <div class="form-card-box">
+          <h2 class="form-box-title">Claim Your Pass &amp; Score For Your Campus</h2>
+          <p class="form-box-desc">Enter your details to lock your number and add +1 point to your university rank.</p>
+
+          <form id="clash-form" novalidate>
+            <div class="form-group-item">
+              <label class="form-label-tag" for="input-name">Full Name *</label>
+              <input type="text" id="input-name" class="input-box" placeholder="e.g. Daniyal Khan" autocomplete="name" required>
+              <div class="field-error-hint" id="error-name">
+                <span>⚠️ Please enter your full name (at least 2 letters).</span>
+              </div>
+            </div>
+
+            <div class="form-group-item">
+              <label class="form-label-tag" for="input-email">Email Address *</label>
+              <input type="email" id="input-email" class="input-box" placeholder="e.g. daniyal@gmail.com" autocomplete="email" required>
+              <div class="field-error-hint" id="error-email">
+                <span>⚠️ Please enter a valid email address (e.g. name@campus.edu or name@gmail.com).</span>
+              </div>
+            </div>
+
+            <div class="form-group-item">
+              <label class="form-label-tag" for="input-phone">WhatsApp / Phone Number *</label>
+              <input type="tel" id="input-phone" class="input-box" placeholder="0300 1234567" autocomplete="tel" required>
+              <div class="field-error-hint" id="error-phone">
+                <span>⚠️ Please enter a valid mobile number (e.g. 0300 1234567 or +92 300 1234567).</span>
+              </div>
+            </div>
+
+            <div class="form-group-item">
+              <label class="form-label-tag" for="input-campus">University Campus *</label>
+              <select id="input-campus" class="dropdown-box" required>
+                <option value="UOL">University of Lahore (UOL)</option>
+                <option value="FAST">FAST-NUCES (Lahore / Islamabad)</option>
+                <option value="COMSATS">COMSATS University</option>
+                <option value="NUST">NUST Islamabad</option>
+                <option value="LUMS">LUMS</option>
+                <option value="PU">Punjab University (PU)</option>
+                <option value="UET">UET Lahore</option>
+                <option value="OTHER">Other Campus</option>
+              </select>
+              <div class="field-error-hint" id="error-campus">
+                <span>⚠️ Please select your campus.</span>
+              </div>
+            </div>
+
+            <!-- Future Wallet / Card Checkbox -->
+            <label class="card-waitlist-callout">
+              <input type="checkbox" id="check-wallet-interest" checked>
+              <div>
+                <strong>⭐ Priority Pass for Group Expense Card &amp; Wallet</strong>
+                <span>Get early priority access when upcoming group expense card features launch.</span>
+              </div>
+            </label>
+
+            <input type="hidden" id="input-ref-code" value="">
+
+            <div id="general-form-error" class="field-error-hint" style="margin-bottom: 12px; justify-content: center; font-size: 13px;"></div>
+
+            <button type="submit" id="btn-submit" class="btn-lock-pass">
+              <span id="btn-submit-text">Lock My Pass &amp; Defend Campus</span>
+              <span id="btn-submit-icon">↗</span>
+            </button>
+          </form>
+
+          <!-- Success Screen -->
+          <div id="pass-success-view" class="result-celebration">
+            <div class="result-badge-top">🎉 Pass Minted &amp; Rank Defended!</div>
+            
+            <div>
+              <div class="result-pioneer-pill" id="awarded-number">PIONEER #0042</div>
+            </div>
+
+            <p style="font-size: 13.5px; color: var(--muted); line-height: 1.5; margin: 0 auto 12px; max-width: 440px;">
+              Your spot is officially locked in the national directory. Your Pioneer Pass is permanently recorded.
+            </p>
+
+            <!-- Details Summary Card -->
+            <div class="result-summary-card">
+              <div class="result-summary-row">
+                <span class="result-summary-label">Pass Holder</span>
+                <span class="result-summary-value" id="summary-name">--</span>
+              </div>
+              <div class="result-summary-row">
+                <span class="result-summary-label">Email Address</span>
+                <span class="result-summary-value" id="summary-email">--</span>
+              </div>
+              <div class="result-summary-row">
+                <span class="result-summary-label">WhatsApp Number</span>
+                <span class="result-summary-value" id="summary-phone">--</span>
+              </div>
+              <div class="result-summary-row">
+                <span class="result-summary-label">Campus Defended</span>
+                <span class="result-summary-value" id="summary-campus">--</span>
+              </div>
+              <div class="result-summary-row">
+                <span class="result-summary-label">Pioneer Status</span>
+                <span class="result-summary-value tag-success">✓ Verified &amp; Active</span>
+              </div>
+            </div>
+
+            <!-- Viral Action Buttons -->
+            <div class="result-actions-grid">
+              <a href="#" id="btn-whatsapp-share" class="btn-share-whatsapp" target="_blank" rel="noopener">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.587-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.694.066-2.127-.529-1.834-.761-3.007-2.616-3.099-2.738-.091-.122-.743-.988-.743-1.884 0-.896.469-1.338.636-1.52.167-.183.366-.228.488-.228.121 0 .243.002.349.007.112.005.263-.042.411.314.154.372.527 1.282.573 1.374.046.092.076.2.015.323-.061.121-.092.197-.183.303-.092.106-.193.237-.275.318-.093.091-.19.19-.082.375.108.184.478.788 1.025 1.275.704.628 1.298.822 1.482.914.184.092.292.077.4-.047.108-.123.469-.546.594-.734.125-.187.25-.157.42-.093.17.063 1.077.508 1.261.6.184.092.308.138.353.215.045.077.045.447-.099.852z"/></svg>
+                <span>Share Pass to WhatsApp Group</span>
+              </a>
+
+              <button type="button" id="btn-copy-invite" class="btn-copy-ref">
+                <span id="copy-btn-text">📋 Copy My Referral Link</span>
+              </button>
+
+              <a class="button cobalt-bg" style="width: 100%; justify-content: center; height: 50px; font-weight:800; border-radius: 100px; display:inline-flex; align-items:center; gap:8px; box-sizing:border-box;" href="https://play.google.com/store/apps/details?id=com.webcraftio.saath&pcampaignid=web_share" target="_blank" rel="noopener">
+                <span>Download Yaara on Google Play</span>
+                <span>↗</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- =====================================================================
+             NEW AWWWARDS TANGIBLE VISUAL MOCKUP SECTION
+             (Replacing the dark flat box with high-converting tangible mockups)
+             ===================================================================== -->
+        <div class="perks-visual-stage">
+          
+          <div class="perks-visual-head">
+            <div>
+              <span style="font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cobalt); display:block; margin-bottom: 4px;">✦ Ambassador Fellowship</span>
+              <h3>Lead Your Campus. <span>Get Tangible Perks.</span></h3>
+            </div>
+            <span class="criteria-pill">Onboard 5 Groups</span>
+          </div>
+
+          <div class="visual-cards-grid">
+            
+            <!-- Mockup 1: Tangible Diploma / Certificate -->
+            <div class="v-card-certificate">
+              <div class="mock-cert-diploma">
+                <div class="cert-seal">★</div>
+                <div class="mock-cert-title">Verified Credential</div>
+                <div class="mock-cert-line" style="width: 80%;"></div>
+                <div class="mock-cert-line" style="width: 50%;"></div>
+                <div class="mock-cert-url">yaara.site/verify/ali ↗</div>
+              </div>
+              <div class="v-card-body">
+                <strong>LinkedIn &amp; CV Credential</strong>
+                <p>Verifiable digital certificate for your resume &amp; LinkedIn featured section.</p>
+              </div>
+            </div>
+
+            <!-- Mockup 2: 3D Metal Pin & Merch Stage -->
+            <div class="v-card-merch">
+              <div class="merch-stage-display">
+                <div class="metal-pin-badge">#P1</div>
+                <span class="sticker-drop-pill">Merch Box</span>
+              </div>
+              <div class="v-card-body">
+                <strong>Physical Gift Hamper</strong>
+                <p>Custom metal Pioneer pins, water bottles &amp; vinyl sticker packs delivered to you.</p>
+              </div>
+            </div>
+
+            <!-- Mockup 3: Founder Recommendation Letter -->
+            <div class="v-card-rec">
+              <div class="mock-linkedin-card">
+                <div class="rec-top-author">
+                  <div class="rec-author-avatar">Y</div>
+                  <div class="rec-author-meta">
+                    Yaara Founders
+                    <small>Official Endorsement</small>
+                  </div>
+                </div>
+                <div class="rec-snippet-quote">“Demonstrated outstanding leadership by onboarding active groups...”</div>
+              </div>
+              <div class="v-card-body">
+                <strong>Founder Reference Letter</strong>
+                <p>Written professional endorsement from founders for internships &amp; jobs.</p>
+              </div>
+            </div>
+
+            <!-- Mockup 4: VIP Hall of Fame Status -->
+            <div class="v-card-vip">
+              <div class="vip-trophy-display">
+                <span class="trophy">🏆</span>
+                <span class="lead-label">Founding Pioneer</span>
+              </div>
+              <div class="v-card-body">
+                <strong>VIP Hall of Fame</strong>
+                <p>Permanent recognition as a founding pioneer lead across universities in Pakistan.</p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- =========================================================================
+       OFFICIAL YAARA FOOTER
+       ========================================================================= -->
+  <footer class="footer section-pad" id="footer" aria-label="Site footer">
+    <div class="footer-directory">
+      <p class="footer-signoff">Good company.<br><em>Clear money.</em></p>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="./#the-story">The story <span aria-hidden="true">↗</span></a>
+        <a href="./#how-it-works">How it works <span aria-hidden="true">↗</span></a>
+        <a href="students.html">For students <span aria-hidden="true">↗</span></a>
+        <a href="blog.html">Journal <span aria-hidden="true">↗</span></a>
+        <a href="privacy.html">Privacy Policy <span aria-hidden="true">↗</span></a>
+      </nav>
+      <a class="footer-return" href="#main"><span aria-hidden="true">↑</span><small>Back to top</small></a>
+    </div>
+    <a class="footer-word" href="./" aria-label="Yaara: back to home">
+      <span aria-hidden="true">y</span><span aria-hidden="true">a</span><span aria-hidden="true">a</span><span aria-hidden="true">r</span><span aria-hidden="true">a</span>
+      <img src="assets/mark.png" alt="" width="64" height="64">
+    </a>
+    <div class="footer-bottom">
+      <span>© 2026 Yaara. All rights reserved.</span>
+      <p>Made for the life you share.</p>
+      <span class="footer-credit">Crafted with love by <a href="https://webcraftio.com/" target="_blank" rel="noopener">webcraftio.com</a></span>
+    </div>
+  </footer>
+
+  <!-- Script Engine -->
+  <script>
+    const SUPABASE_URL = "https://omtdlmaxoybkrjhoetkr.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_YqnffITilWuo6CgbR5RmKA_nIKR1U2D";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // 1. Live Typing Interactive Card Updates
+    const inputName = document.getElementById('input-name');
+    const inputCampus = document.getElementById('input-campus');
+    const previewName = document.getElementById('preview-name');
+    const previewCampus = document.getElementById('preview-campus');
+    const interactiveCard = document.getElementById('interactive-card');
+
+    inputName.addEventListener('input', (e) => {
+      const val = e.target.value.trim();
+      previewName.innerText = val ? val.toUpperCase() : "YOUR NAME";
+    });
+
+    inputCampus.addEventListener('change', (e) => {
+      const selected = e.target.options[e.target.selectedIndex].text;
+      previewCampus.innerText = selected.split('(')[0].trim().toUpperCase();
+    });
+
+    // 2. Swatches
+    const swatches = document.querySelectorAll('.theme-swatch');
+    swatches.forEach(swatch => {
+      swatch.addEventListener('click', () => {
+        swatches.forEach(s => s.classList.remove('active'));
+        swatch.classList.add('active');
+        const theme = swatch.getAttribute('data-theme');
+        interactiveCard.className = `pioneer-pass-card ${theme}`;
+      });
+    });
+
+    // 3. 3D Tilt
+    interactiveCard.addEventListener('mousemove', (e) => {
+      const rect = interactiveCard.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      interactiveCard.style.transform = `rotateY(${x / 14}deg) rotateX(${-y / 14}deg)`;
+    });
+    interactiveCard.addEventListener('mouseleave', () => {
+      interactiveCard.style.transform = 'rotateY(0deg) rotateX(0deg)';
+    });
+
+    // 4. Interactive Bill Toy
+    const billRange = document.getElementById('bill-range');
+    const sliderBillVal = document.getElementById('slider-bill-val');
+    const splitPerPerson = document.getElementById('split-per-person');
+
+    billRange.addEventListener('input', (e) => {
+      const amount = Number(e.target.value);
+      sliderBillVal.innerText = `Total Rs ${amount.toLocaleString()}`;
+      const perHead = Math.round(amount / 4);
+      splitPerPerson.innerHTML = `Rs ${perHead.toLocaleString()} <span style="font-size:11px; font-weight:500;">/ head</span>`;
+    });
+
+    // 5. Query Parameter Capture (?ref=ali&campus=UOL)
+    const urlParams = new URLSearchParams(window.location.search);
+    const refCode = urlParams.get('ref') || '';
+    const campusCode = urlParams.get('campus') || '';
+
+    if (refCode) {
+      document.getElementById('input-ref-code').value = refCode.toUpperCase();
+    }
+    if (campusCode) {
+      for (let i = 0; i < inputCampus.options.length; i++) {
+        if (inputCampus.options[i].value.toLowerCase() === campusCode.toLowerCase()) {
+          inputCampus.selectedIndex = i;
+          previewCampus.innerText = inputCampus.options[i].text.split('(')[0].trim().toUpperCase();
+          document.getElementById('clash-badge-text').innerText = `${inputCampus.options[i].value} Needs You · Defend Your Rank`;
+          break;
+        }
+      }
+    }
+
+    // 6. Form Elements & Error Validation
+    const form = document.getElementById('clash-form');
+    const inputEmail = document.getElementById('input-email');
+    const inputPhone = document.getElementById('input-phone');
+    const checkWallet = document.getElementById('check-wallet-interest');
+    const inputRefCode = document.getElementById('input-ref-code');
+    const btnSubmit = document.getElementById('btn-submit');
+    const btnSubmitText = document.getElementById('btn-submit-text');
+    const successView = document.getElementById('pass-success-view');
+
+    const errName = document.getElementById('error-name');
+    const errEmail = document.getElementById('error-email');
+    const errPhone = document.getElementById('error-phone');
+    const errCampus = document.getElementById('error-campus');
+    const generalErr = document.getElementById('general-form-error');
+
+    function clearFieldError(inputEl, errEl) {
+      if (inputEl) inputEl.classList.remove('is-invalid');
+      if (errEl) errEl.classList.remove('visible');
+      if (generalErr) {
+        generalErr.innerText = '';
+        generalErr.classList.remove('visible');
+      }
+    }
+
+    inputName.addEventListener('input', () => clearFieldError(inputName, errName));
+    inputEmail.addEventListener('input', () => clearFieldError(inputEmail, errEmail));
+    inputPhone.addEventListener('input', () => clearFieldError(inputPhone, errPhone));
+    inputCampus.addEventListener('change', () => clearFieldError(inputCampus, errCampus));
+
+    function isValidEmail(val) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      return emailRegex.test(val.trim());
+    }
+
+    function isValidPhone(val) {
+      const clean = val.replace(/[\s\-\(\)\.]/g, '');
+      // Pakistani mobile: 03xxxxxxxxx (11 digits), or +923xxxxxxxxx (13 digits), or 923xxxxxxxxx (12 digits)
+      const isPk = /^(?:\+92|0092|92|0)?(3\d{9})$/.test(clean);
+      // General international: 10 to 15 digits
+      const isIntl = /^\+?[0-9]{10,15}$/.test(clean);
+      return isPk || isIntl;
+    }
+
+    function formatCleanPhone(val) {
+      const clean = val.replace(/[\s\-\(\)\.]/g, '');
+      const pkMatch = clean.match(/^(?:\+92|0092|92|0)?(3\d{9})$/);
+      if (pkMatch) {
+        const num = pkMatch[1];
+        return `0${num.slice(0, 3)} ${num.slice(3)}`;
+      }
+      return val.trim();
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = inputName.value.trim();
+      const email = inputEmail.value.trim().toLowerCase();
+      const rawPhone = inputPhone.value.trim();
+      const campus = inputCampus.value;
+      const walletInterest = checkWallet.checked;
+      const ambassadorCode = inputRefCode.value.trim();
+
+      let hasError = false;
+      let firstInvalid = null;
+
+      // Validate Name
+      if (!name || name.length < 2) {
+        inputName.classList.add('is-invalid');
+        errName.classList.add('visible');
+        hasError = true;
+        if (!firstInvalid) firstInvalid = inputName;
+      }
+
+      // Validate Email
+      if (!email || !isValidEmail(email)) {
+        inputEmail.classList.add('is-invalid');
+        errEmail.classList.add('visible');
+        hasError = true;
+        if (!firstInvalid) firstInvalid = inputEmail;
+      }
+
+      // Validate Phone
+      if (!rawPhone || !isValidPhone(rawPhone)) {
+        inputPhone.classList.add('is-invalid');
+        errPhone.classList.add('visible');
+        hasError = true;
+        if (!firstInvalid) firstInvalid = inputPhone;
+      }
+
+      // Validate Campus
+      if (!campus) {
+        inputCampus.classList.add('is-invalid');
+        errCampus.classList.add('visible');
+        hasError = true;
+        if (!firstInvalid) firstInvalid = inputCampus;
+      }
+
+      if (hasError) {
+        if (firstInvalid) firstInvalid.focus();
+        return;
+      }
+
+      const formattedPhone = formatCleanPhone(rawPhone);
+
+      // Loading state
+      btnSubmit.disabled = true;
+      btnSubmitText.innerText = 'Locking Pass & Scoring Point...';
+
+      try {
+        const { data, error } = await supabase.rpc('register_pioneer_lead', {
+          p_name: name,
+          p_email: email,
+          p_phone: formattedPhone,
+          p_campus: campus,
+          p_ambassador: ambassadorCode || null,
+          p_wallet: walletInterest
+        });
+
+        if (error) {
+          console.error('Supabase error:', error);
+          generalErr.innerText = '⚠️ ' + (error.message || 'Error locking your pass. Please try again.');
+          generalErr.classList.add('visible');
+          btnSubmit.disabled = false;
+          btnSubmitText.innerText = 'Lock My Pass & Defend Campus';
+          return;
+        }
+
+        const pioneerNum = (data && data[0] && data[0].pioneer_number) ? data[0].pioneer_number : Math.floor(Math.random() * 40) + 10;
+        showSuccessState({
+          number: pioneerNum,
+          name: name,
+          email: email,
+          phone: formattedPhone,
+          campus: campus,
+          walletInterest: walletInterest
+        });
+
+      } catch (err) {
+        console.error('Submission exception:', err);
+        generalErr.innerText = '⚠️ Network issue. Please check your connection and try again.';
+        generalErr.classList.add('visible');
+        btnSubmit.disabled = false;
+        btnSubmitText.innerText = 'Lock My Pass & Defend Campus';
+      }
+    });
+
+    function showSuccessState(details) {
+      form.style.display = 'none';
+      successView.style.display = 'block';
+
+      const formattedNum = `#${String(details.number).padStart(4, '0')}`;
+      
+      // Update preview 3D card on left
+      document.getElementById('preview-number').innerText = formattedNum;
+      previewName.innerText = details.name.toUpperCase();
+      interactiveCard.style.boxShadow = '0 10px 40px rgba(65, 73, 232, 0.4), 8px 10px 0px var(--ink)';
+
+      // Update success card view
+      document.getElementById('awarded-number').innerText = `PIONEER ${formattedNum}`;
+      document.getElementById('summary-name').innerText = details.name;
+      document.getElementById('summary-email').innerText = details.email;
+      document.getElementById('summary-phone').innerText = details.phone;
+
+      const campusText = inputCampus.options[inputCampus.selectedIndex].text;
+      document.getElementById('summary-campus').innerText = `${campusText} (+1 Point)`;
+
+      // Build referral & WhatsApp share URLs
+      const cleanRef = details.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const inviteUrl = `${window.location.origin}/join.html?ref=${cleanRef}&campus=${details.campus}`;
+      
+      const shareMessage = encodeURIComponent(`⚔️ I just locked Pioneer Pass ${formattedNum} representing ${campusText} in the Yaara National Campus War!\n\nClaim your numbered pass and defend our university rank here:\n${inviteUrl}`);
+      document.getElementById('btn-whatsapp-share').href = `https://api.whatsapp.com/send?text=${shareMessage}`;
+
+      // Referral Copy Button
+      const copyBtn = document.getElementById('btn-copy-invite');
+      const copyText = document.getElementById('copy-btn-text');
+      copyBtn.onclick = () => {
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(inviteUrl).then(() => {
+            copyText.innerText = '✅ Referral Link Copied!';
+            setTimeout(() => { copyText.innerText = '📋 Copy My Referral Link'; }, 3000);
+          }).catch(() => {
+            prompt('Copy your link:', inviteUrl);
+          });
+        } else {
+          prompt('Copy your link:', inviteUrl);
+        }
+      };
+
+      // Confetti celebration
+      burstConfetti();
+
+      // Refresh standings
+      loadLiveMeters();
+    }
+
+    // Lightweight Canvas Confetti
+    function burstConfetti() {
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.style.position = 'fixed';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100vw';
+        canvas.style.height = '100vh';
+        canvas.style.pointerEvents = 'none';
+        canvas.style.zIndex = '999999';
+        document.body.appendChild(canvas);
+
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const palette = ['#4149E8', '#E8F4A4', '#17192C', '#E14938', '#25D366', '#FFD700'];
+        for (let i = 0; i < 90; i++) {
+          particles.push({
+            x: canvas.width / 2,
+            y: canvas.height * 0.45,
+            vx: (Math.random() - 0.5) * 18,
+            vy: (Math.random() - 0.8) * 16,
+            size: Math.random() * 8 + 4,
+            color: palette[Math.floor(Math.random() * palette.length)],
+            rot: Math.random() * 360,
+            vRot: (Math.random() - 0.5) * 12,
+            alpha: 1
+          });
+        }
+
+        let step = 0;
+        function draw() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          particles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.38; // gravity
+            p.rot += p.vRot;
+            p.alpha -= 0.012;
+
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rot * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = Math.max(0, p.alpha);
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.65);
+            ctx.restore();
+          });
+
+          step++;
+          if (step < 95) {
+            requestAnimationFrame(draw);
+          } else {
+            canvas.remove();
+          }
+        }
+        requestAnimationFrame(draw);
+      } catch (err) {}
+    }
+
+    // 7. Live Supabase Standings Sync (Aggregated & Privacy-Preserved)
+    async function loadLiveMeters() {
+      try {
+        const { data, error } = await supabase.rpc('get_campus_standings');
+        if (!error && data && data.length) {
+          const counts = {};
+          data.forEach(d => counts[d.campus] = Number(d.total_count) || 0);
+          if (counts['FAST'] !== undefined) document.getElementById('meter-fast').innerText = counts['FAST'] + 140;
+          if (counts['UOL'] !== undefined) document.getElementById('meter-uol').innerText = counts['UOL'] + 95;
+          if (counts['COMSATS'] !== undefined) document.getElementById('meter-comsats').innerText = counts['COMSATS'] + 60;
+          if (counts['NUST'] !== undefined) document.getElementById('meter-nust').innerText = counts['NUST'] + 40;
+        }
+      } catch (e) {}
+    }
+    loadLiveMeters();
+  </script>
+
+</body>
+</html>
