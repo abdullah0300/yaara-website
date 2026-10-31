@@ -1372,7 +1372,7 @@
           <h2 class="form-box-title">Claim Your Pass &amp; Score For Your Campus</h2>
           <p class="form-box-desc">Enter your details to lock your number and add +1 point to your university rank.</p>
 
-          <form id="clash-form" novalidate>
+          <form id="clash-form" novalidate onsubmit="event.preventDefault(); return handlePioneerSubmit(event);">
             <div class="form-group-item">
               <label class="form-label-tag" for="input-name">Full Name *</label>
               <input type="text" id="input-name" class="input-box" placeholder="e.g. Daniyal Khan" autocomplete="name" required>
@@ -1427,7 +1427,7 @@
 
             <div id="general-form-error" class="field-error-hint" style="margin-bottom: 12px; justify-content: center; font-size: 13px;"></div>
 
-            <button type="submit" id="btn-submit" class="btn-lock-pass">
+            <button type="submit" id="btn-submit" class="btn-lock-pass" onclick="handlePioneerSubmit(event);">
               <span id="btn-submit-text">Lock My Pass &amp; Defend Campus</span>
               <span id="btn-submit-icon">↗</span>
             </button>
@@ -1601,190 +1601,183 @@
   <script>
     const SUPABASE_URL = "https://omtdlmaxoybkrjhoetkr.supabase.co";
     const SUPABASE_KEY = "sb_publishable_YqnffITilWuo6CgbR5RmKA_nIKR1U2D";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    let _supabaseClient = null;
 
-    // 1. Live Typing Interactive Card Updates
-    const inputName = document.getElementById('input-name');
-    const inputCampus = document.getElementById('input-campus');
-    const previewName = document.getElementById('preview-name');
-    const previewCampus = document.getElementById('preview-campus');
-    const interactiveCard = document.getElementById('interactive-card');
-
-    inputName.addEventListener('input', (e) => {
-      const val = e.target.value.trim();
-      previewName.innerText = val ? val.toUpperCase() : "YOUR NAME";
-    });
-
-    inputCampus.addEventListener('change', (e) => {
-      const selected = e.target.options[e.target.selectedIndex].text;
-      previewCampus.innerText = selected.split('(')[0].trim().toUpperCase();
-    });
-
-    // 2. Swatches
-    const swatches = document.querySelectorAll('.theme-swatch');
-    swatches.forEach(swatch => {
-      swatch.addEventListener('click', () => {
-        swatches.forEach(s => s.classList.remove('active'));
-        swatch.classList.add('active');
-        const theme = swatch.getAttribute('data-theme');
-        interactiveCard.className = `pioneer-pass-card ${theme}`;
-      });
-    });
-
-    // 3. 3D Tilt
-    interactiveCard.addEventListener('mousemove', (e) => {
-      const rect = interactiveCard.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      interactiveCard.style.transform = `rotateY(${x / 14}deg) rotateX(${-y / 14}deg)`;
-    });
-    interactiveCard.addEventListener('mouseleave', () => {
-      interactiveCard.style.transform = 'rotateY(0deg) rotateX(0deg)';
-    });
-
-    // 4. Interactive Bill Toy
-    const billRange = document.getElementById('bill-range');
-    const sliderBillVal = document.getElementById('slider-bill-val');
-    const splitPerPerson = document.getElementById('split-per-person');
-
-    billRange.addEventListener('input', (e) => {
-      const amount = Number(e.target.value);
-      sliderBillVal.innerText = `Total Rs ${amount.toLocaleString()}`;
-      const perHead = Math.round(amount / 4);
-      splitPerPerson.innerHTML = `Rs ${perHead.toLocaleString()} <span style="font-size:11px; font-weight:500;">/ head</span>`;
-    });
-
-    // 5. Query Parameter Capture (?ref=ali&campus=UOL)
-    const urlParams = new URLSearchParams(window.location.search);
-    const refCode = urlParams.get('ref') || '';
-    const campusCode = urlParams.get('campus') || '';
-
-    if (refCode) {
-      document.getElementById('input-ref-code').value = refCode.toUpperCase();
-    }
-    if (campusCode) {
-      for (let i = 0; i < inputCampus.options.length; i++) {
-        if (inputCampus.options[i].value.toLowerCase() === campusCode.toLowerCase()) {
-          inputCampus.selectedIndex = i;
-          previewCampus.innerText = inputCampus.options[i].text.split('(')[0].trim().toUpperCase();
-          document.getElementById('clash-badge-text').innerText = `${inputCampus.options[i].value} Needs You · Defend Your Rank`;
-          break;
+    function getSupabase() {
+      if (!_supabaseClient && window.supabase && typeof window.supabase.createClient === 'function') {
+        try {
+          _supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        } catch (e) {
+          console.warn('Supabase SDK initialization notice:', e);
         }
+      }
+      return _supabaseClient;
+    }
+
+    // Direct REST API fallback for RPC
+    async function rpcCall(functionName, payload) {
+      const client = getSupabase();
+      if (client) {
+        try {
+          const res = await client.rpc(functionName, payload);
+          if (!res.error && res.data !== undefined && res.data !== null) {
+            return { data: res.data, error: null };
+          }
+          if (res.error) {
+            console.warn('SDK RPC error for ' + functionName + ':', res.error);
+          }
+        } catch (sdkErr) {
+          console.warn('SDK RPC threw for ' + functionName + ':', sdkErr);
+        }
+      }
+
+      try {
+        const resp = await fetch(SUPABASE_URL + '/rest/v1/rpc/' + functionName, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload || {})
+        });
+
+        if (!resp.ok) {
+          const errData = await resp.json().catch(() => ({ message: resp.statusText }));
+          return { data: null, error: errData };
+        }
+
+        const data = await resp.json();
+        return { data, error: null };
+      } catch (netErr) {
+        return { data: null, error: netErr };
       }
     }
 
-    // 6. Form Elements & Error Validation
-    const form = document.getElementById('clash-form');
-    const inputEmail = document.getElementById('input-email');
-    const inputPhone = document.getElementById('input-phone');
-    const checkWallet = document.getElementById('check-wallet-interest');
-    const inputRefCode = document.getElementById('input-ref-code');
-    const btnSubmit = document.getElementById('btn-submit');
-    const btnSubmitText = document.getElementById('btn-submit-text');
-    const successView = document.getElementById('pass-success-view');
+    // 1. Validation Helpers
+    function isValidEmail(val) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      return emailRegex.test((val || '').trim());
+    }
 
-    const errName = document.getElementById('error-name');
-    const errEmail = document.getElementById('error-email');
-    const errPhone = document.getElementById('error-phone');
-    const errCampus = document.getElementById('error-campus');
-    const generalErr = document.getElementById('general-form-error');
+    function isValidPhone(val) {
+      const clean = (val || '').replace(/[\s\-\(\)\.]/g, '');
+      const isPk = /^(?:\+92|0092|92|0)?(3\d{9})$/.test(clean);
+      const isIntl = /^\+?[0-9]{10,15}$/.test(clean);
+      return isPk || isIntl;
+    }
+
+    function formatCleanPhone(val) {
+      const clean = (val || '').replace(/[\s\-\(\)\.]/g, '');
+      const pkMatch = clean.match(/^(?:\+92|0092|92|0)?(3\d{9})$/);
+      if (pkMatch) {
+        const num = pkMatch[1];
+        return '0' + num.slice(0, 3) + ' ' + num.slice(3);
+      }
+      return (val || '').trim();
+    }
 
     function clearFieldError(inputEl, errEl) {
       if (inputEl) inputEl.classList.remove('is-invalid');
       if (errEl) errEl.classList.remove('visible');
+      const generalErr = document.getElementById('general-form-error');
       if (generalErr) {
         generalErr.innerText = '';
         generalErr.classList.remove('visible');
       }
     }
 
-    inputName.addEventListener('input', () => clearFieldError(inputName, errName));
-    inputEmail.addEventListener('input', () => clearFieldError(inputEmail, errEmail));
-    inputPhone.addEventListener('input', () => clearFieldError(inputPhone, errPhone));
-    inputCampus.addEventListener('change', () => clearFieldError(inputCampus, errCampus));
-
-    function isValidEmail(val) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-      return emailRegex.test(val.trim());
-    }
-
-    function isValidPhone(val) {
-      const clean = val.replace(/[\s\-\(\)\.]/g, '');
-      // Pakistani mobile: 03xxxxxxxxx (11 digits), or +923xxxxxxxxx (13 digits), or 923xxxxxxxxx (12 digits)
-      const isPk = /^(?:\+92|0092|92|0)?(3\d{9})$/.test(clean);
-      // General international: 10 to 15 digits
-      const isIntl = /^\+?[0-9]{10,15}$/.test(clean);
-      return isPk || isIntl;
-    }
-
-    function formatCleanPhone(val) {
-      const clean = val.replace(/[\s\-\(\)\.]/g, '');
-      const pkMatch = clean.match(/^(?:\+92|0092|92|0)?(3\d{9})$/);
-      if (pkMatch) {
-        const num = pkMatch[1];
-        return `0${num.slice(0, 3)} ${num.slice(3)}`;
+    // 2. Global Form Submit Handler (Attached to Form Submit & Button Click)
+    window.handlePioneerSubmit = async function(e) {
+      if (e) {
+        if (typeof e.preventDefault === 'function') e.preventDefault();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
       }
-      return val.trim();
-    }
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+      const form = document.getElementById('clash-form');
+      const inputName = document.getElementById('input-name');
+      const inputEmail = document.getElementById('input-email');
+      const inputPhone = document.getElementById('input-phone');
+      const inputCampus = document.getElementById('input-campus');
+      const checkWallet = document.getElementById('check-wallet-interest');
+      const inputRefCode = document.getElementById('input-ref-code');
+      const btnSubmit = document.getElementById('btn-submit');
+      const btnSubmitText = document.getElementById('btn-submit-text');
+      const errName = document.getElementById('error-name');
+      const errEmail = document.getElementById('error-email');
+      const errPhone = document.getElementById('error-phone');
+      const errCampus = document.getElementById('error-campus');
+      const generalErr = document.getElementById('general-form-error');
 
-      const name = inputName.value.trim();
-      const email = inputEmail.value.trim().toLowerCase();
-      const rawPhone = inputPhone.value.trim();
-      const campus = inputCampus.value;
-      const walletInterest = checkWallet.checked;
-      const ambassadorCode = inputRefCode.value.trim();
+      const name = inputName ? inputName.value.trim() : '';
+      const email = inputEmail ? inputEmail.value.trim().toLowerCase() : '';
+      const rawPhone = inputPhone ? inputPhone.value.trim() : '';
+      const campus = inputCampus ? inputCampus.value : '';
+      const walletInterest = checkWallet ? checkWallet.checked : true;
+      const ambassadorCode = inputRefCode ? inputRefCode.value.trim() : '';
 
       let hasError = false;
       let firstInvalid = null;
 
-      // Validate Name
+      // Clear previous error states
+      if (inputName) inputName.classList.remove('is-invalid');
+      if (inputEmail) inputEmail.classList.remove('is-invalid');
+      if (inputPhone) inputPhone.classList.remove('is-invalid');
+      if (inputCampus) inputCampus.classList.remove('is-invalid');
+      if (errName) errName.classList.remove('visible');
+      if (errEmail) errEmail.classList.remove('visible');
+      if (errPhone) errPhone.classList.remove('visible');
+      if (errCampus) errCampus.classList.remove('visible');
+      if (generalErr) {
+        generalErr.innerText = '';
+        generalErr.classList.remove('visible');
+      }
+
+      // Step 1: Validate Name
       if (!name || name.length < 2) {
-        inputName.classList.add('is-invalid');
-        errName.classList.add('visible');
+        if (inputName) inputName.classList.add('is-invalid');
+        if (errName) errName.classList.add('visible');
         hasError = true;
         if (!firstInvalid) firstInvalid = inputName;
       }
 
-      // Validate Email
+      // Step 2: Validate Email
       if (!email || !isValidEmail(email)) {
-        inputEmail.classList.add('is-invalid');
-        errEmail.classList.add('visible');
+        if (inputEmail) inputEmail.classList.add('is-invalid');
+        if (errEmail) errEmail.classList.add('visible');
         hasError = true;
         if (!firstInvalid) firstInvalid = inputEmail;
       }
 
-      // Validate Phone
+      // Step 3: Validate Phone Number
       if (!rawPhone || !isValidPhone(rawPhone)) {
-        inputPhone.classList.add('is-invalid');
-        errPhone.classList.add('visible');
+        if (inputPhone) inputPhone.classList.add('is-invalid');
+        if (errPhone) errPhone.classList.add('visible');
         hasError = true;
         if (!firstInvalid) firstInvalid = inputPhone;
       }
 
-      // Validate Campus
+      // Step 4: Validate Campus
       if (!campus) {
-        inputCampus.classList.add('is-invalid');
-        errCampus.classList.add('visible');
+        if (inputCampus) inputCampus.classList.add('is-invalid');
+        if (errCampus) errCampus.classList.add('visible');
         hasError = true;
         if (!firstInvalid) firstInvalid = inputCampus;
       }
 
       if (hasError) {
-        if (firstInvalid) firstInvalid.focus();
-        return;
+        if (firstInvalid && typeof firstInvalid.focus === 'function') firstInvalid.focus();
+        return false;
       }
 
       const formattedPhone = formatCleanPhone(rawPhone);
 
-      // Loading state
-      btnSubmit.disabled = true;
-      btnSubmitText.innerText = 'Locking Pass & Scoring Point...';
+      // Loading state on button
+      if (btnSubmit) btnSubmit.disabled = true;
+      if (btnSubmitText) btnSubmitText.innerText = 'Locking Pass & Scoring Point...';
 
       try {
-        const { data, error } = await supabase.rpc('register_pioneer_lead', {
+        const { data, error } = await rpcCall('register_pioneer_lead', {
           p_name: name,
           p_email: email,
           p_phone: formattedPhone,
@@ -1794,15 +1787,25 @@
         });
 
         if (error) {
-          console.error('Supabase error:', error);
-          generalErr.innerText = '⚠️ ' + (error.message || 'Error locking your pass. Please try again.');
-          generalErr.classList.add('visible');
-          btnSubmit.disabled = false;
-          btnSubmitText.innerText = 'Lock My Pass & Defend Campus';
-          return;
+          console.error('Registration error:', error);
+          if (generalErr) {
+            generalErr.innerText = '⚠️ ' + (error.message || 'Error locking your pass. Please try again.');
+            generalErr.classList.add('visible');
+          }
+          if (btnSubmit) btnSubmit.disabled = false;
+          if (btnSubmitText) btnSubmitText.innerText = 'Lock My Pass & Defend Campus';
+          return false;
         }
 
-        const pioneerNum = (data && data[0] && data[0].pioneer_number) ? data[0].pioneer_number : Math.floor(Math.random() * 40) + 10;
+        let pioneerNum = null;
+        if (Array.isArray(data) && data[0] && data[0].pioneer_number !== undefined) {
+          pioneerNum = data[0].pioneer_number;
+        } else if (data && data.pioneer_number !== undefined) {
+          pioneerNum = data.pioneer_number;
+        } else {
+          pioneerNum = Math.floor(Math.random() * 40) + 10;
+        }
+
         showSuccessState({
           number: pioneerNum,
           name: name,
@@ -1814,55 +1817,80 @@
 
       } catch (err) {
         console.error('Submission exception:', err);
-        generalErr.innerText = '⚠️ Network issue. Please check your connection and try again.';
-        generalErr.classList.add('visible');
-        btnSubmit.disabled = false;
-        btnSubmitText.innerText = 'Lock My Pass & Defend Campus';
+        if (generalErr) {
+          generalErr.innerText = '⚠️ Network issue. Please check your connection and try again.';
+          generalErr.classList.add('visible');
+        }
+        if (btnSubmit) btnSubmit.disabled = false;
+        if (btnSubmitText) btnSubmitText.innerText = 'Lock My Pass & Defend Campus';
       }
-    });
 
+      return false;
+    };
+
+    // 3. Success State View
     function showSuccessState(details) {
-      form.style.display = 'none';
-      successView.style.display = 'block';
+      const form = document.getElementById('clash-form');
+      const successView = document.getElementById('pass-success-view');
+      const interactiveCard = document.getElementById('interactive-card');
+      const previewNumber = document.getElementById('preview-number');
+      const previewName = document.getElementById('preview-name');
+      const awardedNumber = document.getElementById('awarded-number');
+      const summaryName = document.getElementById('summary-name');
+      const summaryEmail = document.getElementById('summary-email');
+      const summaryPhone = document.getElementById('summary-phone');
+      const summaryCampus = document.getElementById('summary-campus');
+      const inputCampus = document.getElementById('input-campus');
 
-      const formattedNum = `#${String(details.number).padStart(4, '0')}`;
+      if (form) form.style.display = 'none';
+      if (successView) successView.style.display = 'block';
+
+      const formattedNum = '#' + String(details.number).padStart(4, '0');
       
-      // Update preview 3D card on left
-      document.getElementById('preview-number').innerText = formattedNum;
-      previewName.innerText = details.name.toUpperCase();
-      interactiveCard.style.boxShadow = '0 10px 40px rgba(65, 73, 232, 0.4), 8px 10px 0px var(--ink)';
+      // Update preview card on left
+      if (previewNumber) previewNumber.innerText = formattedNum;
+      if (previewName) previewName.innerText = details.name.toUpperCase();
+      if (interactiveCard) {
+        interactiveCard.style.boxShadow = '0 10px 40px rgba(65, 73, 232, 0.4), 8px 10px 0px var(--ink)';
+      }
 
       // Update success card view
-      document.getElementById('awarded-number').innerText = `PIONEER ${formattedNum}`;
-      document.getElementById('summary-name').innerText = details.name;
-      document.getElementById('summary-email').innerText = details.email;
-      document.getElementById('summary-phone').innerText = details.phone;
+      if (awardedNumber) awardedNumber.innerText = 'PIONEER ' + formattedNum;
+      if (summaryName) summaryName.innerText = details.name;
+      if (summaryEmail) summaryEmail.innerText = details.email;
+      if (summaryPhone) summaryPhone.innerText = details.phone;
 
-      const campusText = inputCampus.options[inputCampus.selectedIndex].text;
-      document.getElementById('summary-campus').innerText = `${campusText} (+1 Point)`;
+      let campusText = details.campus;
+      if (inputCampus && inputCampus.selectedIndex >= 0) {
+        campusText = inputCampus.options[inputCampus.selectedIndex].text;
+      }
+      if (summaryCampus) summaryCampus.innerText = campusText + ' (+1 Point)';
 
       // Build referral & WhatsApp share URLs
       const cleanRef = details.name.toLowerCase().replace(/[^a-z0-9]/g, '');
-      const inviteUrl = `${window.location.origin}/join.html?ref=${cleanRef}&campus=${details.campus}`;
+      const inviteUrl = window.location.origin + '/join.html?ref=' + cleanRef + '&campus=' + details.campus;
       
-      const shareMessage = encodeURIComponent(`⚔️ I just locked Pioneer Pass ${formattedNum} representing ${campusText} in the Yaara National Campus War!\n\nClaim your numbered pass and defend our university rank here:\n${inviteUrl}`);
-      document.getElementById('btn-whatsapp-share').href = `https://api.whatsapp.com/send?text=${shareMessage}`;
+      const shareMessage = encodeURIComponent('⚔️ I just locked Pioneer Pass ' + formattedNum + ' representing ' + campusText + ' in the Yaara National Campus War!\n\nClaim your numbered pass and defend our university rank here:\n' + inviteUrl);
+      const btnWhatsapp = document.getElementById('btn-whatsapp-share');
+      if (btnWhatsapp) btnWhatsapp.href = 'https://api.whatsapp.com/send?text=' + shareMessage;
 
       // Referral Copy Button
       const copyBtn = document.getElementById('btn-copy-invite');
       const copyText = document.getElementById('copy-btn-text');
-      copyBtn.onclick = () => {
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(inviteUrl).then(() => {
-            copyText.innerText = '✅ Referral Link Copied!';
-            setTimeout(() => { copyText.innerText = '📋 Copy My Referral Link'; }, 3000);
-          }).catch(() => {
+      if (copyBtn) {
+        copyBtn.onclick = () => {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(inviteUrl).then(() => {
+              if (copyText) copyText.innerText = '✅ Referral Link Copied!';
+              setTimeout(() => { if (copyText) copyText.innerText = '📋 Copy My Referral Link'; }, 3000);
+            }).catch(() => {
+              prompt('Copy your link:', inviteUrl);
+            });
+          } else {
             prompt('Copy your link:', inviteUrl);
-          });
-        } else {
-          prompt('Copy your link:', inviteUrl);
-        }
-      };
+          }
+        };
+      }
 
       // Confetti celebration
       burstConfetti();
@@ -1871,7 +1899,7 @@
       loadLiveMeters();
     }
 
-    // Lightweight Canvas Confetti
+    // 4. Lightweight Canvas Confetti
     function burstConfetti() {
       try {
         const canvas = document.createElement('canvas');
@@ -1910,7 +1938,7 @@
           particles.forEach(p => {
             p.x += p.vx;
             p.y += p.vy;
-            p.vy += 0.38; // gravity
+            p.vy += 0.38;
             p.rot += p.vRot;
             p.alpha -= 0.012;
 
@@ -1934,23 +1962,147 @@
       } catch (err) {}
     }
 
-    // 7. Live Supabase Standings Sync (Aggregated & Privacy-Preserved)
+    // 5. Live Standings Sync
     async function loadLiveMeters() {
       try {
-        const { data, error } = await supabase.rpc('get_campus_standings');
+        const { data, error } = await rpcCall('get_campus_standings', {});
         if (!error && data && data.length) {
           const counts = {};
           data.forEach(d => counts[d.campus] = Number(d.total_count) || 0);
-          if (counts['FAST'] !== undefined) document.getElementById('meter-fast').innerText = counts['FAST'] + 140;
-          if (counts['UOL'] !== undefined) document.getElementById('meter-uol').innerText = counts['UOL'] + 95;
-          if (counts['COMSATS'] !== undefined) document.getElementById('meter-comsats').innerText = counts['COMSATS'] + 60;
-          if (counts['NUST'] !== undefined) document.getElementById('meter-nust').innerText = counts['NUST'] + 40;
+          const mFast = document.getElementById('meter-fast');
+          const mUol = document.getElementById('meter-uol');
+          const mComsats = document.getElementById('meter-comsats');
+          const mNust = document.getElementById('meter-nust');
+          if (mFast && counts['FAST'] !== undefined) mFast.innerText = counts['FAST'] + 140;
+          if (mUol && counts['UOL'] !== undefined) mUol.innerText = counts['UOL'] + 95;
+          if (mComsats && counts['COMSATS'] !== undefined) mComsats.innerText = counts['COMSATS'] + 60;
+          if (mNust && counts['NUST'] !== undefined) mNust.innerText = counts['NUST'] + 40;
         }
-      } catch (e) {}
+      } catch (e) {
+        console.warn('Could not sync standings:', e);
+      }
     }
-    loadLiveMeters();
-  </script>
 
+    // 6. Interactive DOM Elements Initialization
+    function initJoinPage() {
+      const form = document.getElementById('clash-form');
+      const inputName = document.getElementById('input-name');
+      const inputEmail = document.getElementById('input-email');
+      const inputPhone = document.getElementById('input-phone');
+      const inputCampus = document.getElementById('input-campus');
+      const previewName = document.getElementById('preview-name');
+      const previewCampus = document.getElementById('preview-campus');
+      const interactiveCard = document.getElementById('interactive-card');
+      const errName = document.getElementById('error-name');
+      const errEmail = document.getElementById('error-email');
+      const errPhone = document.getElementById('error-phone');
+      const errCampus = document.getElementById('error-campus');
+
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          window.handlePioneerSubmit(e);
+        });
+      }
+
+      if (inputName) {
+        inputName.addEventListener('input', (e) => {
+          clearFieldError(inputName, errName);
+          const val = e.target.value.trim();
+          if (previewName) previewName.innerText = val ? val.toUpperCase() : 'YOUR NAME';
+        });
+      }
+
+      if (inputEmail) {
+        inputEmail.addEventListener('input', () => clearFieldError(inputEmail, errEmail));
+      }
+
+      if (inputPhone) {
+        inputPhone.addEventListener('input', () => clearFieldError(inputPhone, errPhone));
+      }
+
+      if (inputCampus) {
+        inputCampus.addEventListener('change', (e) => {
+          clearFieldError(inputCampus, errCampus);
+          const selected = e.target.options[e.target.selectedIndex].text;
+          if (previewCampus) previewCampus.innerText = selected.split('(')[0].trim().toUpperCase();
+        });
+      }
+
+      // Swatches
+      const swatches = document.querySelectorAll('.theme-swatch');
+      swatches.forEach(swatch => {
+        swatch.addEventListener('click', () => {
+          swatches.forEach(s => s.classList.remove('active'));
+          swatch.classList.add('active');
+          const theme = swatch.getAttribute('data-theme');
+          if (interactiveCard) interactiveCard.className = 'pioneer-pass-card ' + theme;
+        });
+      });
+
+      // 3D Tilt (desktop mouse only)
+      if (interactiveCard && window.innerWidth > 1024) {
+        interactiveCard.addEventListener('mousemove', (e) => {
+          const rect = interactiveCard.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          interactiveCard.style.transform = 'rotateY(' + (x / 14) + 'deg) rotateX(' + (-y / 14) + 'deg)';
+        });
+        interactiveCard.addEventListener('mouseleave', () => {
+          interactiveCard.style.transform = 'rotateY(0deg) rotateX(0deg)';
+        });
+      }
+
+      // Interactive Bill Toy
+      const billRange = document.getElementById('bill-range');
+      const sliderBillVal = document.getElementById('slider-bill-val');
+      const splitPerPerson = document.getElementById('split-per-person');
+
+      if (billRange) {
+        billRange.addEventListener('input', (e) => {
+          const amount = Number(e.target.value);
+          if (sliderBillVal) sliderBillVal.innerText = 'Total Rs ' + amount.toLocaleString();
+          const perHead = Math.round(amount / 4);
+          if (splitPerPerson) splitPerPerson.innerHTML = 'Rs ' + perHead.toLocaleString() + ' <span style="font-size:11px; font-weight:500;">/ head</span>';
+        });
+      }
+
+      // Query Parameter Capture (?ref=ali&campus=UOL)
+      const urlParams = new URLSearchParams(window.location.search);
+      const refCode = urlParams.get('ref') || '';
+      const campusCode = urlParams.get('campus') || '';
+
+      const inputRefCode = document.getElementById('input-ref-code');
+      if (inputRefCode && refCode) {
+        inputRefCode.value = refCode.toUpperCase();
+      }
+
+      if (inputCampus && campusCode) {
+        for (let i = 0; i < inputCampus.options.length; i++) {
+          if (inputCampus.options[i].value.toLowerCase() === campusCode.toLowerCase()) {
+            inputCampus.selectedIndex = i;
+            if (previewCampus) {
+              previewCampus.innerText = inputCampus.options[i].text.split('(')[0].trim().toUpperCase();
+            }
+            const clashBadge = document.getElementById('clash-badge-text');
+            if (clashBadge) {
+              clashBadge.innerText = inputCampus.options[i].value + ' Needs You · Defend Your Rank';
+            }
+            break;
+          }
+        }
+      }
+
+      // Load live standings
+      loadLiveMeters();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initJoinPage);
+    } else {
+      initJoinPage();
+    }
+  </script>
   <script src="navigation.js"></script>
 </body>
 </html>
